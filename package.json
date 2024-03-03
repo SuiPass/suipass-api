@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "type": "module",
+  "script": {
+    "dev": "vercel dev",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.42",
+    "@vercel/node": "^3.0.1",
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3"
+  }
+}
