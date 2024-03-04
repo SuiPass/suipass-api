@@ -1,6 +1,0 @@
-const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env;
-
-export const GITHUB_CONFIGS = {
-  CLIENT_ID: GITHUB_CLIENT_ID,
-  SECRET: GITHUB_CLIENT_SECRET
-} as const;
