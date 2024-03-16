@@ -1,9 +1,29 @@
 const RuntimeError = require('./runtime-error');
 
-const middleware = (handler) => {
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
+const middleware = (requireWalletAddress, handler) => {
   return async (req, res) => {
     try {
-      await handler(req, res);
+      const walletAddress = req.headers['x-wallet-address'];
+      const query = req.query;
+      const body = req.body;
+
+      if (isDevelopment) {
+        console.info('=================================================================');
+        console.info('URL       ', req.url);
+        console.info('ADDRESS   ', walletAddress);
+        console.info('QUERY     ', query);
+        console.info('BODY      ', body);
+        console.info('=================================================================');
+      }
+
+      if (requireWalletAddress && !walletAddress) {
+        res.status(401).json({ error: 'UNAUTHORIZE' });
+        return;
+      }
+
+      await handler({ walletAddress, query, body, httpReq: req, httpRes: res });
     } catch (err) {
       console.error(err);
 
