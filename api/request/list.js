@@ -15,7 +15,7 @@ module.exports = middleware(true, async ({ walletAddress, query, httpRes }) => {
 
   const records = currentDoc.docs.map((doc) => doc.data());
 
-  return httpRes.status(201).json({
+  return httpRes.json({
     data: records
   });
 });
