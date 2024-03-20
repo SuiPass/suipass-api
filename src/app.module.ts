@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { RequestController } from './presentation';
 import { ProviderService, RequestService } from './app/services';
 import { ConfigModule } from '@nestjs/config';
+import { DatabaseClient, SuiClient } from './infra';
+import { ListenerService } from './app/services/listener.service';
+import { GithubService } from './app/services/github.service';
 import { DatabaseClient } from './infra';
 import {
   GithubProvider,
@@ -15,6 +18,9 @@ import {
   controllers: [RequestController],
   providers: [
     DatabaseClient,
+    SuiClient,
+    ListenerService,
+    GithubService,
 
     // providers
     GithubProvider,
@@ -27,4 +33,4 @@ import {
     ProviderService,
   ],
 })
-export class AppModule {}
+export class AppModule { }

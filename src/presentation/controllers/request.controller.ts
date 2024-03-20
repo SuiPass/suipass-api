@@ -3,20 +3,23 @@ import {
   Controller,
   Get,
   Headers,
-  Param,
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
 import { RequestService } from 'src/app';
+import { GithubService } from 'src/app/services/github.service';
 
 @Controller('/requests')
 export class RequestController {
-  constructor(private readonly requestService: RequestService) {}
+  constructor(
+    private readonly requestService: RequestService,
+    private readonly git: GithubService,
+  ) { }
 
   @Get()
   async getList(
     @Headers('x-wallet-address') walletAddress: string,
-    @Param('provider') provider: string,
+    @Query('provider') provider: string,
   ) {
     if (!walletAddress) throw new UnauthorizedException();
 
@@ -37,5 +40,11 @@ export class RequestController {
       provider,
       walletAddress,
     });
+  }
+
+  // WARN: DEBUG
+  @Post('/approve')
+  async approve(@Body('address') address: string) {
+    return this.git.consumeRequest(address);
   }
 }
