@@ -4,7 +4,6 @@ import {
   Get,
   Headers,
   Post,
-  Query,
   UnauthorizedException,
 } from '@nestjs/common';
 import { RequestService } from 'src/app';
