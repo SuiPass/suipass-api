@@ -5,7 +5,6 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseClient, SuiClient } from './infra';
 import { ListenerService } from './app/services/listener.service';
 import { GithubService } from './app/services/github.service';
-import { DatabaseClient } from './infra';
 import {
   GithubProvider,
   GoogleProvider,

@@ -8,24 +8,24 @@ import {
 
 @Injectable()
 export class ProviderService {
-  constructor(private readonly providerFactory: ProviderFactory) {}
+  constructor(private readonly providerFactory: ProviderFactory) { }
 
   async verify({
     providerCode,
     proof,
   }:
     | {
-        providerCode: ProviderCodes;
-        proof: never;
-      }
+      providerCode: ProviderCodes;
+      proof: never;
+    }
     | {
-        providerCode: ProviderCodes.Github;
-        proof: GithubProviderProof;
-      }
+      providerCode: ProviderCodes.Github;
+      proof: GithubProviderProof;
+    }
     | {
-        providerCode: ProviderCodes.Google;
-        proof: GoogleProviderProof;
-      }) {
+      providerCode: ProviderCodes.Google;
+      proof: GoogleProviderProof;
+    }) {
     const provider = this.providerFactory.get(providerCode);
 
     const res = await provider.verify({ proof });
