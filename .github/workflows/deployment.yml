@@ -64,5 +64,4 @@ jobs:
       - run: |
           echo "${{ secrets.KUBECONFIG }}" | base64 -d > ./kubeconfig
           export KUBECONFIG=./kubeconfig
-          kubectl set image deployment/rep-backend-dev rep-backend-container=tinguyen11702/rep_backend:$TAG -n develop
-          kubectl set image deployment/rep-realtime-dev rep-realtime-container=tinguyen11702/rep_backend:$TAG -n develop
+          kubectl set image deployment/suipass suipass=tinguyen11702/suipass:$TAG -n extra
