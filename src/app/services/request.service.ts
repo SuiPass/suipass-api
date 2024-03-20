@@ -1,9 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DatabaseClient } from 'src/infra';
+import { GithubService } from './github.service';
 
 @Injectable()
 export class RequestService {
-  constructor(private readonly db: DatabaseClient) {}
+  constructor(
+    private readonly db: DatabaseClient,
+    private readonly github: GithubService,
+  ) { }
 
   async create({
     walletAddress,
@@ -36,6 +40,11 @@ export class RequestService {
       createdAt: new Date(),
     };
     await newDoc.set(record);
+    switch (provider.toLowerCase()) {
+      case 'github': {
+        this.github.consumeRequest(walletAddress);
+      }
+    }
   }
 
   async getList({
