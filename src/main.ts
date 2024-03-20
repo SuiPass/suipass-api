@@ -2,9 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ServiceAccount } from 'firebase-admin';
 import * as admin from 'firebase-admin';
+import { test } from './test';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
   app.setGlobalPrefix('api');
 
   const adminConfig: ServiceAccount = {
@@ -19,6 +23,10 @@ async function bootstrap() {
   });
 
   app.enableCors();
+
+  if (isDevelopment) {
+    test(app);
+  }
 
   await app.listen(3001);
 }

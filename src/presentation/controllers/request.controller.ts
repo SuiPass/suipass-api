@@ -2,11 +2,9 @@ import {
   Body,
   Controller,
   Get,
-  Header,
   Headers,
   Param,
   Post,
-  Query,
   UnauthorizedException,
 } from '@nestjs/common';
 import { RequestService } from 'src/app';
