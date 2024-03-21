@@ -7,14 +7,13 @@ import {
   UnauthorizedException,
   Query,
 } from '@nestjs/common';
-import { RequestService } from 'src/app';
-import { GithubService } from 'src/app/services/github.service';
+import { GithubProvider, RequestService } from 'src/app';
 
 @Controller('/requests')
 export class RequestController {
   constructor(
     private readonly requestService: RequestService,
-    private readonly git: GithubService,
+    private readonly git: GithubProvider,
   ) { }
 
   @Get()
@@ -34,18 +33,23 @@ export class RequestController {
   async create(
     @Headers('x-wallet-address') walletAddress: string,
     @Body('provider') provider: string,
+    @Body('proof') proof: string,
   ) {
     if (!walletAddress) throw new UnauthorizedException();
 
     return this.requestService.create({
-      provider,
       walletAddress,
+      provider,
+      proof,
     });
   }
 
   // WARN: DEBUG
   @Post('/approve')
-  async approve(@Body('address') address: string) {
-    return this.git.consumeRequest(address);
+  async approve(
+    @Body('address') address: string,
+    @Body('proof') proof: string,
+  ) {
+    return this.git.consumeRequest(address, proof);
   }
 }

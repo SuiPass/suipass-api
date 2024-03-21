@@ -1,26 +1,30 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DatabaseClient } from 'src/infra';
-import { GithubService } from './github.service';
+import { ProviderFactory } from '../providers';
+import { ProviderCodes } from 'src/domain';
 
 @Injectable()
 export class RequestService {
   constructor(
     private readonly db: DatabaseClient,
-    private readonly github: GithubService,
+    private readonly providerFactory: ProviderFactory,
   ) { }
 
+  // TODO: should be call from the listener?
   async create({
     walletAddress,
-    provider,
+    provider: providerCode,
+    proof,
   }: {
     walletAddress: string;
     provider: string;
+    proof: string;
   }): Promise<void> {
     const currentDoc = await this.db.client
       .collection('requests')
       .doc(walletAddress)
       .collection('items')
-      .where('provider', '==', provider)
+      .where('provider', '==', providerCode)
       .where('isApproved', '==', false)
       .limit(1)
       .get();
@@ -35,16 +39,17 @@ export class RequestService {
       .doc();
 
     const record = {
-      provider,
+      provider: providerCode,
       isApproved: false,
       createdAt: new Date(),
     };
     await newDoc.set(record);
-    switch (provider.toLowerCase()) {
-      case 'github': {
-        this.github.consumeRequest(walletAddress);
-      }
-    }
+
+    const provider = this.providerFactory.get(
+      ProviderCodes[providerCode as keyof typeof ProviderCodes],
+    );
+
+    provider.consumeRequest(walletAddress, proof);
   }
 
   async getList({
