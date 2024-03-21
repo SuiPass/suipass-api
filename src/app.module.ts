@@ -4,7 +4,6 @@ import { ProviderService, RequestService } from './app/services';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseClient, SuiClient } from './infra';
 import { ListenerService } from './app/services/listener.service';
-import { GithubService } from './app/services/github.service';
 import {
   GithubProvider,
   GoogleProvider,
@@ -19,7 +18,6 @@ import {
     DatabaseClient,
     SuiClient,
     ListenerService,
-    GithubService,
 
     // providers
     GithubProvider,
