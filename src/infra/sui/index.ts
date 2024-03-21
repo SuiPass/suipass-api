@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { getFullnodeUrl, SuiClient as Client } from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { SUI_CONFIGS } from 'src/config';
 import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
+import { SUI_CONFIG } from 'src/configs';
 
 @Injectable()
 export class SuiClient {
@@ -27,16 +27,16 @@ export class SuiClient {
     txb.moveCall({
       arguments: [
         txb.object(providerCap),
-        txb.object(SUI_CONFIGS.SUIPASS_ADDR),
+        txb.object(SUI_CONFIG.SUIPASS_ADDR),
         txb.pure.address(address),
         txb.pure.string('hello'),
         txb.pure.u16(1),
       ],
-      target: `${SUI_CONFIGS.PACKAGE_ADDR}::${func}`,
+      target: `${SUI_CONFIG.PACKAGE_ADDR}::${func}`,
     });
     console.log('payload', [
       txb.object(providerCap),
-      txb.object(SUI_CONFIGS.SUIPASS_ADDR),
+      txb.object(SUI_CONFIG.SUIPASS_ADDR),
       txb.pure.address(address),
       txb.pure.string('hello'),
       txb.pure.u16(1),
