@@ -4,4 +4,12 @@ export interface IProvider<T> {
     message?: string;
     data?: any;
   }>;
+  consumeRequest(
+    walletAddress: string,
+    proof: string,
+  ): Promise<{
+    sucess: boolean;
+    message?: string;
+    data?: any;
+  }>;
 }
