@@ -7,7 +7,7 @@ export async function test(app: INestApplication) {
 
   await providerService
     .verify({
-      providerCode: ProviderCodes.Github,
+      providerCode: ProviderCodes.GITHUB,
       proof: { authorizationCode: 'abc' },
     })
     .then((res) => console.info('github verify passed', res))
@@ -15,7 +15,7 @@ export async function test(app: INestApplication) {
 
   await providerService
     .verify({
-      providerCode: ProviderCodes.Google,
+      providerCode: ProviderCodes.GOOGLE,
       proof: { authorizationCode: 'abc' },
     })
     .then((res) => console.info('google verify passed', res))
