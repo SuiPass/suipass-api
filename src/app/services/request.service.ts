@@ -46,7 +46,7 @@ export class RequestService {
     await newDoc.set(record);
 
     const provider = this.providerFactory.get(
-      ProviderCodes[providerCode as keyof typeof ProviderCodes],
+      ProviderCodes[providerCode.toUpperCase() as keyof typeof ProviderCodes],
     );
 
     provider.consumeRequest(walletAddress, proof);

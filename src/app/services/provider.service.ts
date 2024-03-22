@@ -19,11 +19,11 @@ export class ProviderService {
       proof: never;
     }
     | {
-      providerCode: ProviderCodes.Github;
+      providerCode: ProviderCodes.GITHUB;
       proof: GithubProviderProof;
     }
     | {
-      providerCode: ProviderCodes.Google;
+      providerCode: ProviderCodes.GOOGLE;
       proof: GoogleProviderProof;
     }) {
     const provider = this.providerFactory.get(providerCode);

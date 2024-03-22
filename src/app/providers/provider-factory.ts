@@ -4,11 +4,11 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { GoogleProvider } from './google-provider';
 import { TwitterProvider } from './twitter-provider';
 
-type GetProviderOutput<T> = T extends ProviderCodes.Github
+type GetProviderOutput<T> = T extends ProviderCodes.GITHUB
   ? GithubProvider
-  : T extends ProviderCodes.Google
+  : T extends ProviderCodes.GOOGLE
     ? GoogleProvider
-    : T extends ProviderCodes.Twitter
+    : T extends ProviderCodes.TWITTER
       ? TwitterProvider
       : IProvider<any>;
 
@@ -22,13 +22,13 @@ export class ProviderFactory {
 
   get<T extends ProviderCodes>(providerCode: T): GetProviderOutput<T> {
     switch (providerCode) {
-      case ProviderCodes.Github:
+      case ProviderCodes.GITHUB:
         return this.githubProvider as GetProviderOutput<T>;
 
-      case ProviderCodes.Google:
+      case ProviderCodes.GOOGLE:
         return this.googleProvider as GetProviderOutput<T>;
 
-      case ProviderCodes.Twitter:
+      case ProviderCodes.TWITTER:
         return this.twitterProvider as GetProviderOutput<T>;
 
       default:

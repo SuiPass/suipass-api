@@ -1,14 +1,11 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import {
-  getFullnodeUrl,
-  SuiClient,
-  SuiHTTPTransport,
-} from '@mysten/sui.js/client';
+import { SuiClient, SuiHTTPTransport } from '@mysten/sui.js/client';
 import { WebSocket } from 'ws';
 
 @Injectable()
 export class ListenerService implements OnModuleInit {
   onModuleInit() {
+    // NOTE: Disable the listener
     // this.startListener();
   }
 

@@ -1,5 +1,5 @@
 export enum ProviderCodes {
-  Github = 'github',
-  Google = 'google',
-  Twitter = 'twitter',
+  GITHUB = 'GITHUB',
+  GOOGLE = 'GOOGLE',
+  TWITTER = 'TWITTER',
 }
