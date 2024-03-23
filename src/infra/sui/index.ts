@@ -20,7 +20,12 @@ export class SuiClient {
     );
   }
 
-  async approveRequest(providerCap: string, address: string) {
+  async approveRequest(
+    providerCap: string,
+    address: string,
+    evident: string,
+    level: number,
+  ) {
     const txb = new TransactionBlock();
     const func = 'suipass::resolve_request';
 
@@ -29,18 +34,11 @@ export class SuiClient {
         txb.object(providerCap),
         txb.object(SUI_CONFIG.SUIPASS_ADDR),
         txb.pure.address(address),
-        txb.pure.string('hello'),
-        txb.pure.u16(1),
+        txb.pure.string(evident),
+        txb.pure.u16(level),
       ],
       target: `${SUI_CONFIG.PACKAGE_ADDR}::${func}`,
     });
-    console.log('payload', [
-      txb.object(providerCap),
-      txb.object(SUI_CONFIG.SUIPASS_ADDR),
-      txb.pure.address(address),
-      txb.pure.string('hello'),
-      txb.pure.u16(1),
-    ]);
 
     const keypair = Ed25519Keypair.fromSecretKey(
       this.fromHexStrin(
