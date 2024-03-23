@@ -7,14 +7,11 @@ import {
   UnauthorizedException,
   Query,
 } from '@nestjs/common';
-import { GithubProvider, RequestService } from 'src/app';
+import { RequestService } from 'src/app';
 
 @Controller('/requests')
 export class RequestController {
-  constructor(
-    private readonly requestService: RequestService,
-    private readonly git: GithubProvider,
-  ) { }
+  constructor(private readonly requestService: RequestService) { }
 
   @Get()
   async getList(
@@ -42,14 +39,5 @@ export class RequestController {
       provider,
       proof,
     });
-  }
-
-  // WARN: DEBUG
-  @Post('/approve')
-  async approve(
-    @Body('address') address: string,
-    @Body('proof') proof: string,
-  ) {
-    return this.git.consumeRequest(address, proof);
   }
 }

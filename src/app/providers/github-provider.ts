@@ -1,16 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { GITHUB_CONFIG } from 'src/configs';
-import { IProvider } from 'src/domain';
-import { SuiClient } from 'src/infra';
+import { IProvider, VerificationResult } from 'src/domain';
 
 export type GithubProviderProof = { authorizationCode: string };
 
 @Injectable()
 export class GithubProvider implements IProvider<GithubProviderProof> {
-  constructor(private readonly suiclient: SuiClient) { }
+  constructor() { }
 
-  async verify({ proof }: { proof: GithubProviderProof }) {
+  get cap() {
+    return GITHUB_CONFIG.GITHUB_CAP;
+  }
+
+  parseProof(raw: string): GithubProviderProof {
+    return { authorizationCode: raw };
+  }
+
+  async verify({
+    proof,
+  }: {
+    proof: GithubProviderProof;
+  }): Promise<VerificationResult> {
     const { authorizationCode } = proof;
 
     const githubURL = `https://github.com/login/oauth/access_token?client_id=${GITHUB_CONFIG.GITHUB_CLIENT_ID}&client_secret=${GITHUB_CONFIG.GITHUB_CLIENT_SECRET}&code=${authorizationCode}`;
@@ -23,34 +34,24 @@ export class GithubProvider implements IProvider<GithubProviderProof> {
 
     const accessToken = res.data.access_token;
 
+    // TODO: analyze user data and return the evident and level for that user
+    const evidence =
+      'using some protocol to generate the evident of user from their data with out revealing their data';
+    const level = 1;
+
     if (accessToken) {
       return {
-        sucess: true,
-        data: { accessToken },
+        success: true,
+        data: {
+          evidence,
+          level,
+        },
       };
     } else {
       return {
-        sucess: false,
-        data: res.data,
+        success: false,
+        message: "Cannot get user's access_token",
       };
     }
-  }
-
-  async consumeRequest(
-    walletAddress: string,
-    proof: string,
-  ): Promise<{ sucess: boolean; message?: string; data?: any }> {
-    const res = await this.verify({ proof: this.parseProof(proof) });
-
-    // TODO: Analyze something
-    console.log(res.data);
-
-    this.suiclient.approveRequest(GITHUB_CONFIG.GITHUB_CAP, walletAddress);
-
-    return res; // WARN: Dummy return
-  }
-
-  parseProof(raw: string): GithubProviderProof {
-    return { authorizationCode: raw };
   }
 }
