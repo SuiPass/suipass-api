@@ -1,38 +1,152 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { SuiClient, SuiHTTPTransport } from '@mysten/sui.js/client';
-import { WebSocket } from 'ws';
+import { SUI_CONFIG } from 'src/configs';
+// import { SuiClient as Client, SuiHTTPTransport } from '@mysten/sui.js/client';
+// import { WebSocket } from 'ws';
+// import { SUI_CONFIG } from 'src/configs';
+import { DatabaseClient, SuiClient } from 'src/infra';
 
 @Injectable()
 export class ListenerService implements OnModuleInit {
+  constructor(
+    private readonly db: DatabaseClient,
+    private readonly suiclient: SuiClient,
+  ) { }
+
   onModuleInit() {
-    // NOTE: Disable the listener
-    // this.startListener();
+    this.sync().then(() => {
+      console.log('Data synced successfully');
+      // this.startListener();
+    });
   }
 
-  // TODO: listen event to add request to database
-  private async startListener() {
-    const client = new SuiClient({
-      transport: new SuiHTTPTransport({
-        url: 'https://fullnode.testnet.sui.io:443',
-        WebSocketConstructor: WebSocket as never,
-        websocket: {
-          reconnectTimeout: 1000,
-          url: 'wss://rpc.testnet.sui.io:443',
-        },
-      }),
-    });
+  // private async startListener() {
+  //   const client = new SuiClient({
+  //     transport: new SuiHTTPTransport({
+  //       url: SUI_CONFIG.RPC_ENDPOINT,
+  //       WebSocketConstructor: WebSocket as never,
+  //       websocket: {
+  //         reconnectTimeout: 1000,
+  //         url: SUI_CONFIG.WSS_ENDPOINT,
+  //       },
+  //     }),
+  //   });
+  //
+  //   const packageFilter = {
+  //     Package: SUI_CONFIG.PACKAGE_ADDR,
+  //   };
+  //
+  //   client.subscribeEvent({
+  //     filter: packageFilter,
+  //     onMessage(event) {
+  //       console.log('Received an event:', event);
+  //     },
+  //   });
+  // }
 
-    const suipass =
-      '0x2ee0ff8227725610eb9af72c8df358709277c4457c59b3ac67187ab549aa0d92';
-    const packageFilter = {
-      Package: suipass,
-    };
-
-    client.subscribeEvent({
-      filter: packageFilter,
-      onMessage(event) {
-        console.log(event);
+  private async sync() {
+    const data = await this.suiclient.client.getObject({
+      id: SUI_CONFIG.SUIPASS_ADDR,
+      options: {
+        showContent: true,
       },
     });
+    console.log('Suipass', JSON.stringify(data, null, 2));
+    console.log('Suipass Parsed', JSON.stringify(mapToSuipass(data), null, 2));
   }
+}
+
+export type Suipass = {
+  id: string;
+  providers: Provider[];
+  threshold: number;
+  expirationPeriod: number;
+};
+
+export type Provider = {
+  id: string;
+  name: string;
+  submitFee: string;
+  updateFee: string;
+  balance: number;
+  totalLevels: number;
+  score: number;
+  records: Record[];
+  requests: Request[];
+};
+
+export type Record = {
+  requester: string;
+  level: number;
+  evidence: string;
+};
+
+export type Request = {
+  id: string;
+  requester: string;
+  proof: string;
+};
+
+function mapToSuipass(raw: any): Suipass {
+  const { id, expiration_period, providers, threshold } =
+    raw.data.content.fields;
+  return {
+    id: id.id,
+    providers: mapToListProviders(providers),
+    threshold,
+    expirationPeriod: expiration_period,
+  };
+}
+
+function mapToListProviders(raw: any): Provider[] {
+  return raw.fields.contents.map((p: any) => mapToProvider(p));
+}
+
+function mapToProvider(raw: any): Provider {
+  const {
+    id,
+    name,
+    submit_fee,
+    update_fee,
+    balance,
+    total_levels,
+    score,
+    records,
+    requests,
+  } = raw.fields.value.fields;
+  return {
+    id: id.id,
+    name,
+    submitFee: submit_fee,
+    updateFee: update_fee,
+    balance,
+    totalLevels: total_levels,
+    score,
+    records: records.fields.contents.map((val: any): Record => {
+      const {
+        key,
+        value: {
+          fields: { evidence, level },
+        },
+      } = val.fields;
+      return {
+        requester: key,
+        level,
+        evidence,
+      };
+    }),
+    requests: requests.fields.contents.map((val: any): Request => {
+      const {
+        key,
+        value: {
+          fields: { requester, proof },
+        },
+      } = val.fields;
+
+      return {
+        id: key,
+        requester,
+        proof,
+      };
+    }),
+  };
 }
