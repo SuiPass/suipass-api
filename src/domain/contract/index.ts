@@ -28,3 +28,18 @@ export type Request = {
   requester: string;
   proof: string;
 };
+
+export type Approval = {
+  id: string;
+  provider: string;
+  level: number;
+  evidence: string;
+  issuedDate: number;
+};
+
+// WARN: wrong place
+export type UserDetail = {
+  address: string;
+  approvals: Approval[];
+  totalScore: number;
+};

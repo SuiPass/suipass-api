@@ -1,4 +1,4 @@
-import { Provider, Record, Request, Suipass } from '../contract';
+import { Approval, Provider, Record, Request, Suipass } from '../contract';
 import { ProviderEntity } from '../entity';
 
 export function mapToProviderEntity(provider: Provider): ProviderEntity {
@@ -8,8 +8,8 @@ export function mapToProviderEntity(provider: Provider): ProviderEntity {
     submitFee: provider.submitFee,
     updateFee: provider.updateFee,
     balance: provider.balance,
-    totalLevels: provider.maxLevel,
-    score: provider.maxScore,
+    maxLevel: provider.maxLevel,
+    maxScore: provider.maxScore,
   };
 }
 
@@ -20,9 +20,20 @@ export function mapRawToProviderEntity(raw: any): ProviderEntity {
     submitFee: raw.submitFee,
     updateFee: raw.updateFee,
     balance: raw.balance,
-    totalLevels: raw.maxLevel,
-    score: raw.maxScore,
+    maxLevel: raw.maxLevel,
+    maxScore: raw.maxScore,
   };
+}
+
+export function mapToApproval(raw): Approval {
+  const {
+    id,
+    provider,
+    level,
+    evidence,
+    issued_date: issuedDate,
+  } = raw.data.contents.fields;
+  return { id, provider, level, issuedDate, evidence };
 }
 
 export function mapToSuipass(raw: any): Suipass {
