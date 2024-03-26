@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { RequestController } from './presentation';
+import { ProviderController, RequestController } from './presentation';
 import { ProviderService, RequestService } from './app/services';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseClient, SuiClient } from './infra';
@@ -13,7 +13,7 @@ import {
 
 @Module({
   imports: [ConfigModule.forRoot({})],
-  controllers: [RequestController],
+  controllers: [RequestController, ProviderController],
   providers: [
     DatabaseClient,
     SuiClient,

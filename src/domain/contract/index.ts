@@ -11,8 +11,8 @@ export type Provider = {
   submitFee: string;
   updateFee: string;
   balance: number;
-  totalLevels: number;
-  score: number;
+  maxLevel: number;
+  maxScore: number;
   records: Record[];
   requests: Request[];
 };

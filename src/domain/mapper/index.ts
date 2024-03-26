@@ -8,8 +8,20 @@ export function mapToProviderEntity(provider: Provider): ProviderEntity {
     submitFee: provider.submitFee,
     updateFee: provider.updateFee,
     balance: provider.balance,
-    totalLevels: provider.totalLevels,
-    score: provider.score,
+    totalLevels: provider.maxLevel,
+    score: provider.maxScore,
+  };
+}
+
+export function mapRawToProviderEntity(raw: any): ProviderEntity {
+  return {
+    id: raw.id,
+    name: raw.name,
+    submitFee: raw.submitFee,
+    updateFee: raw.updateFee,
+    balance: raw.balance,
+    totalLevels: raw.maxLevel,
+    score: raw.maxScore,
   };
 }
 
@@ -46,34 +58,38 @@ function mapToProvider(raw: any): Provider {
     submitFee: submit_fee,
     updateFee: update_fee,
     balance,
-    totalLevels: max_level,
-    score: max_score,
-    records: records.fields.contents.map((val: any): Record => {
-      const {
-        key,
-        value: {
-          fields: { evidence, level },
-        },
-      } = val.fields;
-      return {
-        requester: key,
-        level,
-        evidence,
-      };
-    }),
-    requests: requests.fields.contents.map((val: any): Request => {
-      const {
-        key,
-        value: {
-          fields: { requester, proof },
-        },
-      } = val.fields;
+    maxLevel: max_level,
+    maxScore: max_score,
+    records: records.fields.contents.map(mapToRecord),
+    requests: requests.fields.contents.map(mapToRequest),
+  };
+}
 
-      return {
-        id: key,
-        requester,
-        proof,
-      };
-    }),
+function mapToRecord(raw: any): Record {
+  const {
+    key,
+    value: {
+      fields: { evidence, level },
+    },
+  } = raw.fields;
+  return {
+    requester: key,
+    level,
+    evidence,
+  };
+}
+
+function mapToRequest(raw: any): Request {
+  const {
+    key,
+    value: {
+      fields: { requester, proof },
+    },
+  } = raw.fields;
+
+  return {
+    id: key,
+    requester,
+    proof,
   };
 }
