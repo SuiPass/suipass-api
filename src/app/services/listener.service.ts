@@ -51,7 +51,11 @@ export class ListenerService implements OnModuleInit {
       },
     });
     console.log('Suipass', JSON.stringify(data, null, 2));
+    const suipass = mapToSuipass(data);
     console.log('Suipass Parsed', JSON.stringify(mapToSuipass(data), null, 2));
+
+    const providerDoc = this.db.client.collection('providers').doc();
+    await providerDoc.set(suipass.providers.map(mapToProviderEntity).at(0));
   }
 }
 
@@ -73,6 +77,28 @@ export type Provider = {
   records: Record[];
   requests: Request[];
 };
+
+export type ProviderEntity = {
+  id: string;
+  name: string;
+  submitFee: string;
+  updateFee: string;
+  balance: number;
+  totalLevels: number;
+  score: number;
+};
+
+function mapToProviderEntity(provider: Provider): ProviderEntity {
+  return {
+    id: provider.id,
+    name: provider.name,
+    submitFee: provider.submitFee,
+    updateFee: provider.updateFee,
+    balance: provider.balance,
+    totalLevels: provider.totalLevels,
+    score: provider.score,
+  };
+}
 
 export type Record = {
   requester: string;
@@ -108,8 +134,8 @@ function mapToProvider(raw: any): Provider {
     submit_fee,
     update_fee,
     balance,
-    total_levels,
-    score,
+    max_level,
+    max_score,
     records,
     requests,
   } = raw.fields.value.fields;
@@ -119,8 +145,8 @@ function mapToProvider(raw: any): Provider {
     submitFee: submit_fee,
     updateFee: update_fee,
     balance,
-    totalLevels: total_levels,
-    score,
+    totalLevels: max_level,
+    score: max_score,
     records: records.fields.contents.map((val: any): Record => {
       const {
         key,
