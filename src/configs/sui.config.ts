@@ -12,8 +12,8 @@ export const SUI_CONFIG = {
     '0x4d0cf2c2b77a23003804355e6796abacf7365682a12c43cf01583c9e01dc2add',
 
   // GATEWAY
-  RPC_ENDPOINT:
+  PRIV_RPC:
     'https://sui-mainnet.blastapi.io/ab04e1d6-749f-4532-8921-14c52f100f34',
-  WSS_ENDPOINT:
+  PRIV_WSS:
     'wss://sui-mainnet.blastapi.io/ab04e1d6-749f-4532-8921-14c52f100f34',
 } as const;
