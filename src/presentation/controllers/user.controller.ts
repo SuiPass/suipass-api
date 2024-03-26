@@ -3,10 +3,11 @@ import { UserService } from 'src/app';
 
 @Controller('/users')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Get('/detail')
   async getList(@Headers('x-wallet-address') walletAddress: string) {
-    return this.userService.getUserDetails(walletAddress);
+    const data = await this.userService.getUserDetails(walletAddress);
+    return { data };
   }
 }

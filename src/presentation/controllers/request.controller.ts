@@ -11,7 +11,7 @@ import { RequestService } from 'src/app';
 
 @Controller('/requests')
 export class RequestController {
-  constructor(private readonly requestService: RequestService) { }
+  constructor(private readonly requestService: RequestService) {}
 
   @Get()
   async getList(
@@ -20,10 +20,12 @@ export class RequestController {
   ) {
     if (!walletAddress) throw new UnauthorizedException();
 
-    return this.requestService.getList({
+    const data = await this.requestService.getList({
       provider,
       walletAddress,
     });
+
+    return { data };
   }
 
   @Post()
