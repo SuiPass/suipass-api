@@ -10,7 +10,7 @@ export class ListenerService implements OnModuleInit {
   constructor(
     private readonly db: DatabaseClient,
     private readonly suiclient: SuiClient,
-  ) { }
+  ) {}
 
   onModuleInit() {
     this.sync().then(() => {
@@ -56,7 +56,7 @@ export class ListenerService implements OnModuleInit {
 
     for (const provider of suipass.providers) {
       const entity = mapToProviderEntity(provider);
-      await providerCollectionRef.doc(entity.id).set(entity);
+      await providerCollectionRef.doc(entity.id).set(entity, { merge: true });
     }
   }
 }

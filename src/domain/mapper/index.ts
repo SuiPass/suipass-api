@@ -5,6 +5,8 @@ export function mapToProviderEntity(provider: Provider): ProviderEntity {
   return {
     id: provider.id,
     name: provider.name,
+    desc: provider.desc,
+    logoUrl: provider.logoUrl,
     submitFee: provider.submitFee,
     updateFee: provider.updateFee,
     balance: provider.balance,
@@ -17,6 +19,8 @@ export function mapRawToProviderEntity(raw: any): ProviderEntity {
   return {
     id: raw.id,
     name: raw.name,
+    desc: raw.desc,
+    logoUrl: raw.logoUrl,
     submitFee: raw.submitFee,
     updateFee: raw.updateFee,
     balance: raw.balance,
@@ -55,6 +59,8 @@ function mapToProvider(raw: any): Provider {
   const {
     id,
     name,
+    desc,
+    logo_url,
     submit_fee,
     update_fee,
     balance,
@@ -66,6 +72,8 @@ function mapToProvider(raw: any): Provider {
   return {
     id: id.id,
     name,
+    desc,
+    logoUrl: logo_url,
     submitFee: submit_fee,
     updateFee: update_fee,
     balance,

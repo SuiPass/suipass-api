@@ -8,6 +8,8 @@ export type Suipass = {
 export type Provider = {
   id: string;
   name: string;
+  desc: string;
+  logoUrl: string;
   submitFee: string;
   updateFee: string;
   balance: number;
