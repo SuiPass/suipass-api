@@ -46,27 +46,35 @@ export class RequestService {
     };
     await newDoc.set(record);
 
+    // Resolve request
     (async () => {
-      const provider = this.providerFactory.get(
-        ProviderCodes[providerCode.toUpperCase() as keyof typeof ProviderCodes],
-      );
-
-      const parsedProof = provider.parseProof(proof);
-
-      const result = await provider.verify({ proof: parsedProof });
-
-      if (result.success === true) {
-        await this.suiclient.approveRequest(
-          provider.cap,
-          walletAddress,
-          result.data.evidence,
-          result.data.level,
+      try {
+        const provider = this.providerFactory.get(
+          ProviderCodes[
+          providerCode.toUpperCase() as keyof typeof ProviderCodes
+          ],
         );
-        await newDoc.update({ isApproved: true });
-      } else {
+
+        const parsedProof = provider.parseProof(proof);
+
+        const result = await provider.verify({ proof: parsedProof });
+
+        if (result.success === true) {
+          await this.suiclient.approveRequest(
+            provider.cap,
+            walletAddress,
+            result.data.evidence,
+            result.data.level,
+          );
+          await newDoc.update({ isApproved: true });
+        } else {
+          throw result.message;
+        }
+      } catch (e) {
+        console.log('Resolve request got error:', e);
         return {
           success: false,
-          message: result.message,
+          message: e,
         };
       }
     })();

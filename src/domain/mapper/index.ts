@@ -36,7 +36,7 @@ export function mapToApproval(raw): Approval {
     level,
     evidence,
     issued_date: issuedDate,
-  } = raw.data.contents.fields;
+  } = raw.data.content.fields;
   return { id, provider, level, issuedDate, evidence };
 }
 
