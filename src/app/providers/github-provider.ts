@@ -35,11 +35,19 @@ export class GithubProvider implements IProvider<GithubProviderProof> {
     const accessToken = res.data.access_token;
 
     // TODO: analyze user data and return the evident and level for that user
-    const evidence =
-      'using some protocol to generate the evident of user from their data with out revealing their data';
-    const level = 1;
-
     if (accessToken) {
+      const userDetail = await axios.get('https://api.github.com/user', {
+        headers: {
+          'Accept': 'application/vnd.github+json',
+          'Authorization': `Bearer ${accessToken}`,
+        }
+      })
+
+      console.log(userDetail.data);
+
+      const evidence = JSON.stringify(userDetail.data)
+      const level = 1;
+
       return {
         success: true,
         data: {

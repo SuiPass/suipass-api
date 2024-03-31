@@ -30,8 +30,8 @@ export class RequestService {
       .limit(1)
       .get();
 
-    if (currentDoc.docs.length)
-      throw new BadRequestException('Request is exists!');
+    // if (currentDoc.docs.length)
+    //   throw new BadRequestException('Request is exists!');
 
     const newDoc = this.db.client
       .collection('requests')
@@ -70,6 +70,7 @@ export class RequestService {
         } else {
           throw result.message;
         }
+        console.log('Resolved request:', result);
       } catch (e) {
         console.log('Resolve request got error:', e);
         return {
