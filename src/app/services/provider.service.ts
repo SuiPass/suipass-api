@@ -8,6 +8,7 @@ import {
   GithubProviderProof,
   GoogleProviderProof,
   ProviderFactory,
+  TwitterProviderProof,
 } from '../providers';
 import { DatabaseClient } from 'src/infra';
 
@@ -16,24 +17,28 @@ export class ProviderService {
   constructor(
     private readonly db: DatabaseClient,
     private readonly providerFactory: ProviderFactory,
-  ) { }
+  ) {}
 
   async verify({
     providerCode,
     proof,
   }:
     | {
-      providerCode: ProviderCodes;
-      proof: never;
-    }
+        providerCode: ProviderCodes;
+        proof: never;
+      }
     | {
-      providerCode: ProviderCodes.GITHUB;
-      proof: GithubProviderProof;
-    }
+        providerCode: ProviderCodes.GITHUB;
+        proof: GithubProviderProof;
+      }
     | {
-      providerCode: ProviderCodes.GOOGLE;
-      proof: GoogleProviderProof;
-    }) {
+        providerCode: ProviderCodes.GOOGLE;
+        proof: GoogleProviderProof;
+      }
+    | {
+        providerCode: ProviderCodes.TWITTER;
+        proof: TwitterProviderProof;
+      }) {
     const provider = this.providerFactory.get(providerCode);
 
     const res = await provider.verify({ proof });
