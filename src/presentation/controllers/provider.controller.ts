@@ -9,8 +9,6 @@ export class ProviderController {
   async getList() {
     const data = await this.providerService.getList();
 
-    return {
-      data,
-    };
+    return data;
   }
 }

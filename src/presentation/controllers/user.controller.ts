@@ -8,6 +8,6 @@ export class UserController {
   @Get('/detail')
   async getList(@Headers('x-wallet-address') walletAddress: string) {
     const data = await this.userService.getUserDetails(walletAddress);
-    return { data };
+    return data;
   }
 }

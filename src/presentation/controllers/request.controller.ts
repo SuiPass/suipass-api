@@ -25,7 +25,7 @@ export class RequestController {
       walletAddress,
     });
 
-    return { data };
+    return data;
   }
 
   @Post()
@@ -43,6 +43,7 @@ export class RequestController {
       provider,
       proof,
     });
-    return { data };
+
+    return data;
   }
 }
