@@ -6,7 +6,7 @@ RUN npm install --production
 
 COPY . .
 
-RUN npm run prebuild && npm run build
+RUN npm run build
 RUN npm prune --production
 RUN node-prune /app/node_modules
 
