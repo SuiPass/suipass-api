@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { GITHUB_CONFIG } from 'src/configs';
+import { TWITTER_CONFIG } from 'src/configs';
 import { IProvider, VerificationResult } from 'src/domain';
 
 export type TwitterProviderProof = { authorizationCode: string };
 
 @Injectable()
 export class TwitterProvider implements IProvider<TwitterProviderProof> {
-  constructor() { }
+  constructor() {}
 
   get cap() {
-    return GITHUB_CONFIG.GITHUB_CAP;
+    return TWITTER_CONFIG.TWITTER_CAP;
   }
 
   async verify({
@@ -20,13 +20,31 @@ export class TwitterProvider implements IProvider<TwitterProviderProof> {
   }): Promise<VerificationResult> {
     const { authorizationCode } = proof;
 
-    const githubURL = `https://github.com/login/oauth/access_token?client_id=${GITHUB_CONFIG.GITHUB_CLIENT_ID}&client_secret=${GITHUB_CONFIG.GITHUB_CLIENT_SECRET}&code=${authorizationCode}`;
+    const basicAuthToken = Buffer.from(
+      `${TWITTER_CONFIG.TWITTER_CLIENT_ID}:${TWITTER_CONFIG.TWITTER_CLIENT_SECRET}`,
+      'utf8',
+    ).toString('base64');
 
-    const res = await axios.post(githubURL, undefined, {
-      headers: {
-        accept: 'application/json',
+    const twitterOauthTokenParams = {
+      client_id: TWITTER_CONFIG.TWITTER_CLIENT_ID,
+      code_verifier: '8KxxO-RPl0bLSxX5AWwgdiFbMnry_VOKzFeIlVA7NoA',
+      redirect_uri: `https://suipass.xyz?suipassProvider=twitter`,
+      grant_type: 'authorization_code',
+      code: authorizationCode,
+    };
+
+    const twitterURL = `https://api.twitter.com/2/oauth2/token`;
+
+    const res = await axios.post(
+      twitterURL,
+      new URLSearchParams(twitterOauthTokenParams).toString(),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: `Basic ${basicAuthToken}`,
+        },
       },
-    });
+    );
 
     const accessToken = res.data.access_token;
 

@@ -13,3 +13,11 @@ export const GOOGLE_CONFIG = {
   GOOGLE_CAP: process.env.GOOGLE_CAP,
   GOOGLE_PROVIDER_ID: process.env.GOOGLE_PROVIDER_ID,
 } as const;
+
+export const TWITTER_CONFIG = {
+  TWITTER_CLIENT_ID: process.env.TWITTER_CLIENT_ID,
+  TWITTER_CLIENT_SECRET: process.env.TWITTER_CLIENT_SECRET,
+  TWITTER_OWNER: process.env.TWITTER_OWNER,
+  TWITTER_CAP: process.env.TWITTER_CAP,
+  TWITTER_PROVIDER_ID: process.env.TWITTER_PROVIDER_ID,
+} as const;
