@@ -22,7 +22,7 @@ export class SuiClient {
 
   async approveRequest(
     providerCap: string,
-    address: string,
+    requestId: string,
     evident: string,
     level: number,
   ) {
@@ -33,7 +33,7 @@ export class SuiClient {
       arguments: [
         txb.object(providerCap),
         txb.object(SUI_CONFIG.SUIPASS_ADDR),
-        txb.pure.address(address),
+        txb.pure.address(requestId),
         txb.pure.string(evident),
         txb.pure.u16(level),
       ],

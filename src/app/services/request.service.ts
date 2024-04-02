@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DatabaseClient, SuiClient } from 'src/infra';
 import { ProviderFactory } from '../providers';
-import { ProviderCodes } from 'src/domain';
+import { parseProviderCode } from 'src/domain';
 
 @Injectable()
 export class RequestService {
@@ -9,16 +9,18 @@ export class RequestService {
     private readonly db: DatabaseClient,
     private readonly providerFactory: ProviderFactory,
     private readonly suiclient: SuiClient,
-  ) { }
+  ) {}
 
   // TODO: should be call from the listener?
   async create({
     walletAddress,
     provider: providerCode,
+    requestId,
     proof,
   }: {
     walletAddress: string;
     provider: string;
+    requestId: string;
     proof: string;
   }): Promise<void> {
     const currentDoc = await this.db.client
@@ -50,9 +52,7 @@ export class RequestService {
     (async () => {
       try {
         const provider = this.providerFactory.get(
-          ProviderCodes[
-          providerCode.toUpperCase() as keyof typeof ProviderCodes
-          ],
+          parseProviderCode(providerCode),
         );
 
         const parsedProof = provider.parseProof(proof);
@@ -62,7 +62,7 @@ export class RequestService {
         if (result.success === true) {
           await this.suiclient.approveRequest(
             provider.cap,
-            walletAddress,
+            requestId,
             result.data.evidence,
             result.data.level,
           );
@@ -70,6 +70,7 @@ export class RequestService {
         } else {
           throw result.message;
         }
+        console.log('Resolved request:', result);
       } catch (e) {
         console.log('Resolve request got error:', e);
         return {

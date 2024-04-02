@@ -32,12 +32,14 @@ export class RequestController {
   async create(
     @Headers('x-wallet-address') walletAddress: string,
     @Body('provider') provider: string,
+    @Body('requestId') _requestId: string,
     @Body('proof') proof: string,
   ) {
     if (!walletAddress) throw new UnauthorizedException();
 
     return this.requestService.create({
       walletAddress,
+      requestId: walletAddress, // HACK: should be set as requestId
       provider,
       proof,
     });

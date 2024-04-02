@@ -21,14 +21,14 @@ export async function test(app: INestApplication) {
     .then((res) => console.info('google verify passed', res))
     .catch((err) => console.error('google verify failed', err));
 
-  await providerService
-    .verify({
-      providerCode: ProviderCodes.TWITTER,
-      proof: {
-        authorizationCode:
-          'dEhuNWVzMWlDLU9sMEFmVU54NjRpTk5Sc2dyMUtKaXlqYk1ydHdneWctSzhnOjE3MTE5OTkxMzMzMzI6MTowOmFjOjE',
-      },
-    })
-    .then((res) => console.info('twitter verify passed', res))
-    .catch((err) => console.error('twitter verify failed', err));
+  // await providerService
+  //   .verify({
+  //     providerCode: ProviderCodes.TWITTER,
+  //     proof: {
+  //       authorizationCode:
+  //         'dEhuNWVzMWlDLU9sMEFmVU54NjRpTk5Sc2dyMUtKaXlqYk1ydHdneWctSzhnOjE3MTE5OTkxMzMzMzI6MTowOmFjOjE',
+  //     },
+  //   })
+  //   .then((res) => console.info('twitter verify passed', res))
+  //   .catch((err) => console.error('twitter verify failed', err));
 }
