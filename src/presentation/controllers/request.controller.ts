@@ -37,11 +37,12 @@ export class RequestController {
   ) {
     if (!walletAddress) throw new UnauthorizedException();
 
-    return this.requestService.create({
+    const data = this.requestService.create({
       walletAddress,
       requestId: walletAddress, // HACK: should be set as requestId
       provider,
       proof,
     });
+    return { data };
   }
 }

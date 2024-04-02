@@ -3,12 +3,14 @@ import { AppModule } from './app.module';
 import { ServiceAccount } from 'firebase-admin';
 import * as admin from 'firebase-admin';
 import { test } from './test';
+import { HttpExceptionFilter, InternalServerFilter } from './middlewares';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const isDevelopment = process.env.NODE_ENV === 'development';
 
+  app.useGlobalFilters(new InternalServerFilter(), new HttpExceptionFilter());
   app.setGlobalPrefix('api');
 
   const adminConfig: ServiceAccount = {

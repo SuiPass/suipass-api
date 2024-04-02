@@ -22,7 +22,7 @@ export class RequestService {
     provider: string;
     requestId: string;
     proof: string;
-  }): Promise<void> {
+  }): Promise<any> {
     const currentDoc = await this.db.client
       .collection('requests')
       .doc(walletAddress)
@@ -34,6 +34,14 @@ export class RequestService {
 
     if (currentDoc.docs.length)
       throw new BadRequestException('Request is exists!');
+
+    console.log(
+      'Create a request',
+      walletAddress,
+      providerCode,
+      requestId,
+      proof,
+    );
 
     const newDoc = this.db.client
       .collection('requests')
@@ -49,36 +57,24 @@ export class RequestService {
     await newDoc.set(record);
 
     // Resolve request
-    (async () => {
-      try {
-        const provider = this.providerFactory.get(
-          parseProviderCode(providerCode),
-        );
+    const provider = this.providerFactory.get(parseProviderCode(providerCode));
 
-        const parsedProof = provider.parseProof(proof);
+    const parsedProof = provider.parseProof(proof);
 
-        const result = await provider.verify({ proof: parsedProof });
+    const result = await provider.verify({ proof: parsedProof });
 
-        if (result.success === true) {
-          await this.suiclient.approveRequest(
-            provider.cap,
-            requestId,
-            result.data.evidence,
-            result.data.level,
-          );
-          await newDoc.update({ isApproved: true });
-        } else {
-          throw result.message;
-        }
-        console.log('Resolved request:', result);
-      } catch (e) {
-        console.log('Resolve request got error:', e);
-        return {
-          success: false,
-          message: e,
-        };
-      }
-    })();
+    if (result.success === true) {
+      await this.suiclient.approveRequest(
+        provider.cap,
+        requestId,
+        result.data.evidence,
+        result.data.level,
+      );
+      await newDoc.update({ isApproved: true });
+    } else {
+      throw result.message;
+    }
+    return result;
   }
 
   async getList({
