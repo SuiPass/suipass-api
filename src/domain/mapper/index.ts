@@ -1,6 +1,10 @@
 import { Approval, Provider, Record, Request, Suipass } from '../contract';
 import { ProviderEntity } from '../entity';
 
+export function base64ToString(src: string): string {
+  return Buffer.from(src, 'base64').toString('utf8');
+}
+
 export function mapToProviderEntity(provider: Provider): ProviderEntity {
   return {
     id: provider.id,
@@ -59,8 +63,7 @@ function mapToProvider(raw: any): Provider {
   const {
     id,
     name,
-    desc,
-    logo_url,
+    metadata,
     submit_fee,
     update_fee,
     balance,
@@ -69,11 +72,12 @@ function mapToProvider(raw: any): Provider {
     records,
     requests,
   } = raw.fields.value.fields;
+  const objMetadata = JSON.parse(base64ToString(metadata));
   return {
     id: id.id,
     name,
-    desc,
-    logoUrl: logo_url,
+    desc: objMetadata.desc,
+    logoUrl: objMetadata.logoUrl,
     submitFee: submit_fee,
     updateFee: update_fee,
     balance,
