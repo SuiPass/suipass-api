@@ -11,7 +11,7 @@ import { RequestService } from 'src/app';
 
 @Controller('/requests')
 export class RequestController {
-  constructor(private readonly requestService: RequestService) { }
+  constructor(private readonly requestService: RequestService) {}
 
   @Get()
   async getList(
@@ -32,12 +32,14 @@ export class RequestController {
   async create(
     @Headers('x-wallet-address') walletAddress: string,
     @Body('provider') provider: string,
+    @Body('requestId') _requestId: string,
     @Body('proof') proof: string,
   ) {
     if (!walletAddress) throw new UnauthorizedException();
 
     return this.requestService.create({
       walletAddress,
+      requestId: walletAddress, // HACK: should be set as requestId
       provider,
       proof,
     });
