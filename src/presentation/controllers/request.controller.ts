@@ -11,7 +11,7 @@ import { RequestService } from 'src/app';
 
 @Controller('/requests')
 export class RequestController {
-  constructor(private readonly requestService: RequestService) {}
+  constructor(private readonly requestService: RequestService) { }
 
   @Get()
   async getList(
