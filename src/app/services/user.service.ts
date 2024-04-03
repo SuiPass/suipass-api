@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { SUI_CONFIG } from 'src/configs';
 import {
+  Approval,
+  ApprovalDto,
   ProviderEntity,
-  UserDetail,
+  UserDetailDto,
   mapRawToProviderEntity,
   mapToApproval,
 } from 'src/domain';
@@ -15,7 +17,7 @@ export class UserService {
     private readonly sui: SuiClient,
   ) { }
 
-  async getUserDetails(walletAddress: string): Promise<UserDetail> {
+  async getApprovals(walletAddress: string): Promise<Approval[]> {
     const userObjects = await this.sui.client.getOwnedObjects({
       owner: walletAddress,
       filter: {
@@ -39,7 +41,11 @@ export class UserService {
       },
     });
 
-    const approvals = userObjects.data.map(mapToApproval);
+    return userObjects.data.map(mapToApproval);
+  }
+
+  async getUserDetails(walletAddress: string): Promise<UserDetailDto> {
+    const approvals = await this.getApprovals(walletAddress);
 
     const ref = await this.db.client.collection('providers').get();
 
@@ -51,15 +57,16 @@ export class UserService {
     });
 
     let totalScore = 0;
-    for (const approval of approvals) {
+    const approvalsDto: ApprovalDto[] = approvals.map((approval) => {
       const provider = providersMap.get(approval.provider);
       const score = (approval.level / provider.maxLevel) * provider.maxScore;
       totalScore += score;
-    }
+      return { ...approval, score };
+    });
 
     return {
       address: walletAddress,
-      approvals,
+      approvals: approvalsDto,
       totalScore,
     };
   }

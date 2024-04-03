@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import {
+  ApprovalDto,
   ProviderCodes,
+  ProviderDto,
   ProviderEntity,
   mapRawToProviderEntity,
 } from 'src/domain';
@@ -11,6 +13,7 @@ import {
   TwitterProviderProof,
 } from '../providers';
 import { DatabaseClient } from 'src/infra';
+import { UserService } from './user.service';
 
 @Injectable()
 export class ProviderService {
@@ -18,6 +21,7 @@ export class ProviderService {
     private readonly db: DatabaseClient,
     private readonly providerFactory: ProviderFactory,
   ) {}
+    private readonly userSvc: UserService,
 
   async verify({
     providerCode,
@@ -46,14 +50,27 @@ export class ProviderService {
     return res;
   }
 
-  async getList(): Promise<ProviderEntity[]> {
+  async getList(walletAddress: string | undefined): Promise<ProviderDto[]> {
     const ref = await this.db.client.collection('providers').get();
 
-    const providers = ref.docs.map((doc) => {
+    const providersMap = new Map<string, ProviderDto>();
+    ref.docs.forEach((doc) => {
       const raw = doc.data();
-      return mapRawToProviderEntity(raw);
+      const provider = mapRawToProviderEntity(raw);
+      providersMap.set(provider.id, provider);
     });
 
-    return providers;
+    if (walletAddress) {
+      const approvals = await this.userSvc.getApprovals(walletAddress);
+      for (const approval of approvals) {
+        const provider = providersMap.get(approval.provider);
+        const score = (approval.level / provider.maxLevel) * provider.maxScore;
+        const approvalDto: ApprovalDto = { ...approval, score };
+        provider.approvals = [approvalDto];
+        providersMap.set(approval.provider, provider);
+      }
+    }
+
+    return Array.from(providersMap.values());
   }
 }
