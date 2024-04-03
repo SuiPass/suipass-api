@@ -3,7 +3,6 @@ import {
   ApprovalDto,
   ProviderCodes,
   ProviderDto,
-  ProviderEntity,
   mapRawToProviderEntity,
 } from 'src/domain';
 import {
@@ -20,8 +19,8 @@ export class ProviderService {
   constructor(
     private readonly db: DatabaseClient,
     private readonly providerFactory: ProviderFactory,
-  ) {}
     private readonly userSvc: UserService,
+  ) { }
 
   async verify({
     providerCode,
