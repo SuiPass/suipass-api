@@ -12,6 +12,7 @@ export class GoogleProvider implements IProvider<GoogleProviderProof> {
     this.oauth2Client = new OAuth2Client(
       GOOGLE_CONFIG.GOOGLE_CLIENT_ID,
       GOOGLE_CONFIG.GOOGLE_CLIENT_SECRET,
+      GOOGLE_CONFIG.GOOGLE_REDIRECT_URI,
     );
   }
 
@@ -25,7 +26,6 @@ export class GoogleProvider implements IProvider<GoogleProviderProof> {
     proof: GoogleProviderProof;
   }): Promise<VerificationResult> {
     const { authorizationCode } = proof;
-
     try {
       const { tokens } = await this.oauth2Client.getToken(authorizationCode);
 
@@ -44,6 +44,7 @@ export class GoogleProvider implements IProvider<GoogleProviderProof> {
         };
       }
     } catch (err) {
+      console.error(err);
       return {
         success: false,
         message: `Error: ${err}`,

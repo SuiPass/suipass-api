@@ -28,7 +28,7 @@ export class TwitterProvider implements IProvider<TwitterProviderProof> {
     const twitterOauthTokenParams = {
       client_id: TWITTER_CONFIG.TWITTER_CLIENT_ID,
       code_verifier: '8KxxO-RPl0bLSxX5AWwgdiFbMnry_VOKzFeIlVA7NoA',
-      redirect_uri: `https://suipass.xyz?suipassProvider=twitter`,
+      redirect_uri: TWITTER_CONFIG.TWITTER_REDIRECT_URI,
       grant_type: 'authorization_code',
       code: authorizationCode,
     };

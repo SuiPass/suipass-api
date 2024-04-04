@@ -17,6 +17,7 @@ export type Provider = {
   maxScore: number;
   records: Record[];
   requests: Request[];
+  disabled: boolean;
 };
 
 export type Record = {

@@ -16,6 +16,7 @@ export function mapToProviderEntity(provider: Provider): ProviderEntity {
     balance: provider.balance,
     maxLevel: provider.maxLevel,
     maxScore: provider.maxScore,
+    disabled: provider.disabled,
   };
 }
 
@@ -30,10 +31,11 @@ export function mapRawToProviderEntity(raw: any): ProviderEntity {
     balance: raw.balance,
     maxLevel: raw.maxLevel,
     maxScore: raw.maxScore,
+    disabled: raw.disabled,
   };
 }
 
-export function mapToApproval(raw): Approval {
+export function mapToApproval(raw: any): Approval {
   const {
     id,
     provider,
@@ -69,6 +71,7 @@ function mapToProvider(raw: any): Provider {
     balance,
     max_level,
     max_score,
+    disabled,
     records,
     requests,
   } = raw.fields.value.fields;
@@ -83,6 +86,7 @@ function mapToProvider(raw: any): Provider {
     balance,
     maxLevel: max_level,
     maxScore: max_score,
+    disabled: disabled,
     records: records.fields.contents.map(mapToRecord),
     requests: requests.fields.contents.map(mapToRequest),
   };

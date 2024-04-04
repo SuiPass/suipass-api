@@ -8,4 +8,5 @@ export type ProviderEntity = {
   balance: number;
   maxLevel: number;
   maxScore: number;
+  disabled: boolean;
 };

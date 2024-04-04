@@ -6,6 +6,7 @@ import { ErrorResponseDto } from 'src/domain';
 @Catch(Error)
 export class InternalServerFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {
+    console.error(exception);
     const resp = host.switchToHttp().getResponse<Response>();
     resp
       .status(HttpStatusCode.InternalServerError)
