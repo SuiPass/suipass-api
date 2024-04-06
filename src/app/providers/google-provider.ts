@@ -28,6 +28,7 @@ export class GoogleProvider implements IProvider<GoogleProviderProof> {
     const { authorizationCode } = proof;
     try {
       const { tokens } = await this.oauth2Client.getToken(authorizationCode);
+      console.log('Google access token:', tokens);
 
       // TODO: analyze user data and return the evident and level for that user
       const evidence =

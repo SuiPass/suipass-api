@@ -17,8 +17,8 @@ import {
   GoogleProvider,
   ProviderFactory,
   TwitterProvider,
+  SuiProvider,
 } from './app';
-import { } from './presentation/controllers/user.controller';
 
 @Module({
   imports: [ConfigModule.forRoot({})],
@@ -32,6 +32,7 @@ import { } from './presentation/controllers/user.controller';
     GoogleProvider,
     TwitterProvider,
     ProviderFactory,
+    SuiProvider,
 
     // services
     UserService,
@@ -40,4 +41,4 @@ import { } from './presentation/controllers/user.controller';
     ListenerService,
   ],
 })
-export class AppModule { }
+export class AppModule {}

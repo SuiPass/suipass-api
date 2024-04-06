@@ -1,8 +1,9 @@
 import { IProvider, ProviderCodes } from 'src/domain';
-import { GithubProvider } from './github-provider';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { GithubProvider } from './github-provider';
 import { GoogleProvider } from './google-provider';
 import { TwitterProvider } from './twitter-provider';
+import { SuiProvider } from './sui-provider';
 
 type GetProviderOutput<T> = T extends ProviderCodes.GITHUB
   ? GithubProvider
@@ -10,7 +11,9 @@ type GetProviderOutput<T> = T extends ProviderCodes.GITHUB
     ? GoogleProvider
     : T extends ProviderCodes.TWITTER
       ? TwitterProvider
-      : IProvider<any>;
+      : T extends ProviderCodes.SUI
+        ? SuiProvider
+        : IProvider<any>;
 
 @Injectable()
 export class ProviderFactory {
@@ -18,6 +21,7 @@ export class ProviderFactory {
     private readonly githubProvider: GithubProvider,
     private readonly googleProvider: GoogleProvider,
     private readonly twitterProvider: TwitterProvider,
+    private readonly suiProvider: SuiProvider,
   ) {}
 
   get<T extends ProviderCodes>(providerCode: T): GetProviderOutput<T> {
@@ -30,6 +34,9 @@ export class ProviderFactory {
 
       case ProviderCodes.TWITTER:
         return this.twitterProvider as GetProviderOutput<T>;
+
+      case ProviderCodes.SUI:
+        return this.suiProvider as GetProviderOutput<T>;
 
       default:
         throw new BadRequestException(`Provider don't support!`);

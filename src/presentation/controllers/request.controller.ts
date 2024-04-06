@@ -6,12 +6,13 @@ import {
   Post,
   UnauthorizedException,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { RequestService } from 'src/app';
 
 @Controller('/requests')
 export class RequestController {
-  constructor(private readonly requestService: RequestService) { }
+  constructor(private readonly requestService: RequestService) {}
 
   @Get()
   async getList(
@@ -36,6 +37,7 @@ export class RequestController {
     @Body('proof') proof: string,
   ) {
     if (!walletAddress) throw new UnauthorizedException();
+    if (!provider) throw new BadRequestException('Missing provider');
 
     const data = this.requestService.create({
       walletAddress,

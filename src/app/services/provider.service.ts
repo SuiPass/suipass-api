@@ -11,6 +11,7 @@ import {
   GoogleProviderProof,
   ProviderFactory,
   TwitterProviderProof,
+  SuiProviderProof,
 } from '../providers';
 import { DatabaseClient } from 'src/infra';
 import { UserService } from './user.service';
@@ -42,10 +43,14 @@ export class ProviderService {
     | {
         providerCode: ProviderCodes.TWITTER;
         proof: TwitterProviderProof;
+      }
+    | {
+        providerCode: ProviderCodes.SUI;
+        proof: SuiProviderProof;
       }) {
     const provider = this.providerFactory.get(providerCode);
 
-    const res = await provider.verify({ proof });
+    const res = await provider.verify({ proof: proof as any }); // HACK: Should remove `as any`
 
     return res;
   }
