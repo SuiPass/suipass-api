@@ -13,8 +13,8 @@ export class SuiProvider implements IProvider<SuiProviderProof> {
     return SUI_PROVIDER_CONFIG.SUI_PROVIDER_CAP;
   }
 
-  parseProof(raw: string): SuiProviderProof {
-    return { walletAddress: raw };
+  parseProof(raw: any): SuiProviderProof {
+    return raw;
   }
 
   async verify({
