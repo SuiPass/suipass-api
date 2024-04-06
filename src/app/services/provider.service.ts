@@ -42,6 +42,10 @@ export class ProviderService {
     | {
         providerCode: ProviderCodes.TWITTER;
         proof: TwitterProviderProof;
+      }
+    | {
+        providerCode: ProviderCodes.SUI;
+        proof: TwitterProviderProof;
       }) {
     const provider = this.providerFactory.get(providerCode);
 

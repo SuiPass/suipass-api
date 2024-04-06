@@ -37,10 +37,16 @@ export class RequestService {
 
     console.log(
       'Create a request',
-      walletAddress,
-      providerCode,
-      requestId,
-      proof,
+      JSON.stringify(
+        {
+          walletAddress,
+          providerCode,
+          requestId,
+          proof,
+        },
+        null,
+        2,
+      ),
     );
 
     const newDoc = this.db.client

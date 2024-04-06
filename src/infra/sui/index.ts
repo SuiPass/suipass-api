@@ -55,4 +55,12 @@ export class SuiClient {
     });
     return result;
   }
+
+  async getBalance(walletAddress: string): Promise<number> {
+    const balance = await this.client.getBalance({
+      owner: walletAddress,
+      // coinType: 'SUI',
+    });
+    return Number(balance.totalBalance);
+  }
 }

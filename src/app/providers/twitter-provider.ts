@@ -47,6 +47,7 @@ export class TwitterProvider implements IProvider<TwitterProviderProof> {
     );
 
     const accessToken = res.data.access_token;
+    console.log('Twitter access token:', accessToken);
 
     // TODO: analyze user data and return the evident and level for that user
     const evidence =
