@@ -11,6 +11,7 @@ import {
   GoogleProviderProof,
   ProviderFactory,
   TwitterProviderProof,
+  SuiProviderProof,
 } from '../providers';
 import { DatabaseClient } from 'src/infra';
 import { UserService } from './user.service';
@@ -45,7 +46,7 @@ export class ProviderService {
       }
     | {
         providerCode: ProviderCodes.SUI;
-        proof: TwitterProviderProof;
+        proof: SuiProviderProof;
       }) {
     const provider = this.providerFactory.get(providerCode);
 

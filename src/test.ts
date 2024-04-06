@@ -21,6 +21,17 @@ export async function test(app: INestApplication) {
     .then((res) => console.info('google verify passed', res))
     .catch((err) => console.error('google verify failed', err));
 
+  await providerService
+    .verify({
+      providerCode: ProviderCodes.SUI,
+      proof: {
+        walletAddress:
+          '0xcaf04a98b6be9872ef08a4279c2a148470338d1543cb63cdabe46a093cb88623',
+      },
+    })
+    .then((res) => console.info('sui verify passed', res))
+    .catch((err) => console.error('sui verify failed', err));
+
   // await providerService
   //   .verify({
   //     providerCode: ProviderCodes.TWITTER,
