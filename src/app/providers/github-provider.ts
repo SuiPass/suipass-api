@@ -49,8 +49,8 @@ export class GithubProvider implements IProvider<GithubProviderProof> {
     // Calculate
     const createdAt = new Date(userDetail.data.created_at);
     const now = new Date();
-    const differenceInMilliseconds = now.getTime() - createdAt.getTime();
-    const days = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+    const diffInMs = now.getTime() - createdAt.getTime();
+    const days = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
     const level = days >= 365 ? 3 : days >= 180 ? 2 : days >= 90 ? 1 : 0;
     const evidence = JSON.stringify(userDetail.data);

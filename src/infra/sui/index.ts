@@ -1,5 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { getFullnodeUrl, SuiClient as Client } from '@mysten/sui.js/client';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  getFullnodeUrl,
+  SuiClient as Client,
+  SuiTransactionBlockResponse,
+} from '@mysten/sui.js/client';
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
 import { SUI_CONFIG } from 'src/configs';
@@ -62,5 +66,51 @@ export class SuiClient {
       // coinType: 'SUI',
     });
     return Number(balance.totalBalance);
+  }
+
+  async getTransactionBlocks(walletAddress: string): Promise<any> {
+    let hasNextPage = true;
+    let nextCursor = undefined;
+    const data = [];
+    while (hasNextPage) {
+      const res = await this.client.queryTransactionBlocks({
+        cursor: nextCursor,
+        filter: {
+          ToAddress: walletAddress,
+        },
+        options: {
+          showInput: true,
+        },
+      });
+      hasNextPage = res.hasNextPage;
+      nextCursor = res.nextCursor;
+      data.push(res.data);
+    }
+
+    console.log('Debug txn blocks', JSON.stringify(data, null, 2));
+    return data;
+  }
+
+  async getDepositTxnBlock(
+    walletAddress: string,
+  ): Promise<SuiTransactionBlockResponse> {
+    const res = await this.client.queryTransactionBlocks({
+      cursor: undefined,
+      limit: 1,
+      order: 'ascending',
+      filter: {
+        ToAddress: walletAddress,
+      },
+      options: {
+        showInput: true,
+      },
+    });
+    if (res.data.length === 0) {
+      throw new BadRequestException(
+        'This address did not receive deposit transaction yet',
+      );
+    }
+
+    return res.data[0];
   }
 }

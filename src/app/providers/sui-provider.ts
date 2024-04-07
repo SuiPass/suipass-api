@@ -24,6 +24,14 @@ export class SuiProvider implements IProvider<SuiProviderProof> {
   }): Promise<VerificationResult> {
     const { walletAddress } = proof;
     const balance = await this.suiclient.getBalance(walletAddress);
+    const depositTxb = await this.suiclient.getDepositTxnBlock(walletAddress);
+    // Calculate
+    const createdAt = new Date(depositTxb.timestampMs);
+    const now = new Date();
+    const diffInMs = now.getTime() - createdAt.getTime();
+    // Apply some condition here
+    // const days =
+    Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
     const level =
       balance >= 100000000000 // 100 SUI
