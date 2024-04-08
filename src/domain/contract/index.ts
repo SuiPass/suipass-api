@@ -15,9 +15,15 @@ export type Provider = {
   balance: number;
   maxLevel: number;
   maxScore: number;
+  levels: Level[];
   records: Record[];
   requests: Request[];
   disabled: boolean;
+};
+
+export type Level = {
+  desc: string;
+  level: number;
 };
 
 export type Record = {

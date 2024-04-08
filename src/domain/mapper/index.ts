@@ -1,4 +1,11 @@
-import { Approval, Provider, Record, Request, Suipass } from '../contract';
+import {
+  Approval,
+  Provider,
+  Record,
+  Request,
+  Suipass,
+  Level,
+} from '../contract';
 import { ProviderEntity } from '../entity';
 
 export function base64ToString(src: string): string {
@@ -11,6 +18,7 @@ export function mapToProviderEntity(provider: Provider): ProviderEntity {
     name: provider.name,
     desc: provider.desc,
     logoUrl: provider.logoUrl,
+    levels: provider.levels,
     submitFee: provider.submitFee,
     updateFee: provider.updateFee,
     balance: provider.balance,
@@ -26,6 +34,7 @@ export function mapRawToProviderEntity(raw: any): ProviderEntity {
     name: raw.name,
     desc: raw.desc,
     logoUrl: raw.logoUrl,
+    levels: raw.levels,
     submitFee: raw.submitFee,
     updateFee: raw.updateFee,
     balance: raw.balance,
@@ -81,6 +90,7 @@ function mapToProvider(raw: any): Provider {
     name,
     desc: objMetadata.desc,
     logoUrl: objMetadata.logoUrl,
+    levels: objMetadata.levels.map(mapToLevel),
     submitFee: submit_fee,
     updateFee: update_fee,
     balance,
@@ -89,6 +99,14 @@ function mapToProvider(raw: any): Provider {
     disabled: disabled,
     records: records.fields.contents.map(mapToRecord),
     requests: requests.fields.contents.map(mapToRequest),
+  };
+}
+
+function mapToLevel(raw: any): Level {
+  const { desc, level } = raw;
+  return {
+    desc,
+    level,
   };
 }
 

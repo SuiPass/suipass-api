@@ -30,17 +30,15 @@ export class SuiProvider implements IProvider<SuiProviderProof> {
     const now = new Date();
     const diffInMs = now.getTime() - createdAt.getTime();
     // Apply some condition here
-    // const days =
-    Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+    const days = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
-    const level =
-      balance >= 100000000000 // 100 SUI
-        ? 3
-        : balance >= 10000000000 // 10 SUI
-          ? 2
-          : balance >= 500000000 // 0.5 SUI
-            ? 1
-            : 0;
+    const level = (() => {
+      if (balance > 10000000000 && days > 364) return 3;
+      else if (balance > 5000000000 && days > 179) return 2;
+      else if (balance > 1000000000 && days > 90) return 1;
+      else return 0;
+    })();
+
     const evidence = JSON.stringify({ address: walletAddress });
 
     return {
