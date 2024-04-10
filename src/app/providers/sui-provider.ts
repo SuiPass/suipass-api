@@ -35,7 +35,7 @@ export class SuiProvider implements IProvider<SuiProviderProof> {
     const level = (() => {
       if (balance > 10000000000 && days > 364) return 3;
       else if (balance > 5000000000 && days > 179) return 2;
-      else if (balance > 1000000000 && days > 90) return 1;
+      else if (balance > 1000000000) return 1;
       else return 0;
     })();
 
