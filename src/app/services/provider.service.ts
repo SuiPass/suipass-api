@@ -82,17 +82,36 @@ export class ProviderService {
       const provider: ProviderDto = mapRawToProviderEntity(raw);
       providersMap.set(provider.id, provider);
 
+      if (walletAddress) {
+        // sort approvals by level desc, issuedDate desc
+        const approvalsOfProvider = approvals
+          .filter((approval) => approval.provider === provider.id)
+          .map((approval) => {
+            const provider = providersMap.get(approval.provider);
+            const score =
+              (approval.level / provider.maxLevel) * provider.maxScore;
+            const approvalDto: ApprovalDto = { ...approval, score };
+            return approvalDto;
+          })
+          .sort((a, b) => (a.issuedDate < b.issuedDate ? 1 : -1))
+          .sort((a, b) => (a.level < b.level ? 1 : -1));
+
+        provider.approvals = approvalsOfProvider;
+      }
+
       if (requests) {
         const providerCode = provider.name.toLowerCase();
+        const requestsOfProvider = requests.filter(
+          (request) => request.provider === providerCode,
+        );
+
         switch (true) {
-          case !!requests.find(
-            (request) =>
-              request.provider === providerCode && request.isApproved,
-          ):
+          case !!requestsOfProvider.find((request) => request.isApproved) &&
+            provider.approvals![0].score > 0:
             provider.status = ProviderStatus.VERIFIED;
             break;
 
-          case !!requests.find(
+          case !!requestsOfProvider.find(
             (request) =>
               request.provider === providerCode && !request.isApproved,
           ):
@@ -104,18 +123,6 @@ export class ProviderService {
         }
       }
     });
-
-    if (walletAddress) {
-      for (const approval of approvals) {
-        const provider = providersMap.get(approval.provider);
-        const score = (approval.level / provider.maxLevel) * provider.maxScore;
-        const approvalDto: ApprovalDto = { ...approval, score };
-        provider.approvals = [approvalDto];
-        providersMap.set(approval.provider, provider);
-
-        if (score === 0) provider.status = ProviderStatus.NOT_VERIFIED;
-      }
-    }
 
     return Array.from(providersMap.values());
   }
