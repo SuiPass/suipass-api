@@ -3,9 +3,7 @@ import { SUI_CONFIG } from 'src/configs';
 import {
   Approval,
   ApprovalDto,
-  ProviderEntity,
   UserDetailDto,
-  mapRawToProviderEntity,
   mapToApproval,
 } from 'src/domain';
 import { DatabaseClient, SuiClient } from 'src/infra';
@@ -15,7 +13,7 @@ export class UserService {
   constructor(
     private readonly db: DatabaseClient,
     private readonly sui: SuiClient,
-  ) { }
+  ) {}
 
   async getApprovals(walletAddress: string): Promise<Approval[]> {
     const userObjects = await this.sui.client.getOwnedObjects({
@@ -49,24 +47,41 @@ export class UserService {
 
     const ref = await this.db.client.collection('providers').get();
 
-    const providersMap = new Map<string, ProviderEntity>();
-    ref.docs.forEach((doc) => {
-      const raw = doc.data();
-      const provider = mapRawToProviderEntity(raw);
-      providersMap.set(provider.id, provider);
-    });
-
+    const currentApprovals: ApprovalDto[] = [];
     let totalScore = 0;
-    const approvalsDto: ApprovalDto[] = approvals.map((approval) => {
-      const provider = providersMap.get(approval.provider);
-      const score = (approval.level / provider.maxLevel) * provider.maxScore;
-      totalScore += score;
-      return { ...approval, score };
+
+    ref.docs.forEach((doc) => {
+      const provider = doc.data();
+
+      // sort approvals by level desc, issuedDate desc
+      const approvalsOfProvider = approvals
+        .filter((approval) => approval.provider === provider.id)
+        .map((approval) => {
+          const score =
+            (approval.level / provider.maxLevel) * provider.maxScore;
+          const approvalDto: ApprovalDto = { ...approval, score };
+          return approvalDto;
+        })
+        .sort((a, b) => (a.issuedDate < b.issuedDate ? 1 : -1))
+        .sort((a, b) => (a.level < b.level ? 1 : -1));
+
+      if (approvalsOfProvider.length) {
+        const currentApproval = approvalsOfProvider[0];
+        const score =
+          (currentApproval.level / provider.maxLevel) * provider.maxScore;
+
+        totalScore += score;
+
+        currentApprovals.push({
+          ...currentApproval,
+          score,
+        });
+      }
     });
 
     return {
       address: walletAddress,
-      approvals: approvalsDto,
+      approvals: currentApprovals,
       totalScore,
     };
   }
