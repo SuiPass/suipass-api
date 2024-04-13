@@ -15,6 +15,7 @@ import {
 } from '../providers';
 import { DatabaseClient } from 'src/infra';
 import { UserService } from './user.service';
+import { request } from 'http';
 
 @Injectable()
 export class ProviderService {
@@ -111,6 +112,8 @@ export class ProviderService {
         const approvalDto: ApprovalDto = { ...approval, score };
         provider.approvals = [approvalDto];
         providersMap.set(approval.provider, provider);
+
+        if (score === 0) provider.status = ProviderStatus.NOT_VERIFIED;
       }
     }
 
