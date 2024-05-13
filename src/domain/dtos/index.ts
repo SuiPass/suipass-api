@@ -14,6 +14,18 @@ export type UserDetailDto = {
   approvals: ApprovalDto[];
   totalScore: number;
 };
+export type EnterpriseDto = {
+  name: string;
+  desc: string;
+  providerIds: string[];
+};
+
+export type UserApiKeyDto = {
+  name: string;
+  desc: string;
+  providerIds: string[];
+  apiKey: string; //TODO: Sui module key or whatever, i'm not sure
+}
 export enum ProviderStatus {
   NOT_VERIFIED = 'not_verified',
   WAITING = 'waiting',

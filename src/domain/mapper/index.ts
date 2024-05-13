@@ -7,6 +7,7 @@ import {
   Level,
 } from '../contract';
 import { ProviderEntity } from '../entity';
+import { EnterpriseEntity, UserApiKeyEntity } from '../entity/enterprise';
 
 export function base64ToString(src: string): string {
   return Buffer.from(src, 'base64').toString('utf8');
@@ -41,6 +42,23 @@ export function mapRawToProviderEntity(raw: any): ProviderEntity {
     maxLevel: raw.maxLevel,
     maxScore: raw.maxScore,
     disabled: raw.disabled,
+  };
+}
+
+export function mapRawToEnterpriseEntity(raw: any): EnterpriseEntity {
+  return {
+    name: raw.name,
+    desc: raw.desc,
+    providerIds: raw.providerIds
+  };
+}
+
+export function mapRawToUserApiKeyEntity(raw: any): UserApiKeyEntity {
+  return {
+    name: raw.name,
+    desc: raw.desc,
+    providerIds: raw.providerIds,
+    apiKey: raw.apiKey, //TODO: Sui module key or whatever, i'm not sure
   };
 }
 

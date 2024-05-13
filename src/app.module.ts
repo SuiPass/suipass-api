@@ -3,12 +3,14 @@ import {
   ProviderController,
   RequestController,
   UserController,
+  EnterpriseController
 } from './presentation';
 import {
   ListenerService,
   ProviderService,
   RequestService,
   UserService,
+  EnterpriseService,
 } from './app/services';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseClient, SuiClient } from './infra';
@@ -22,7 +24,7 @@ import {
 
 @Module({
   imports: [ConfigModule.forRoot({})],
-  controllers: [RequestController, ProviderController, UserController],
+  controllers: [RequestController, ProviderController, UserController, EnterpriseController],
   providers: [
     DatabaseClient,
     SuiClient,
@@ -39,6 +41,7 @@ import {
     RequestService,
     ProviderService,
     ListenerService,
+    EnterpriseService
   ],
 })
-export class AppModule {}
+export class AppModule { }
