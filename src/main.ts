@@ -8,19 +8,24 @@ import {
   HttpExceptionFilter,
   InternalServerFilter,
 } from './middlewares';
+import { ZodExceptionFilter } from './middlewares/filters/zodException.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const isDevelopment = process.env.NODE_ENV === 'development';
 
-  app.useGlobalFilters(new InternalServerFilter(), new HttpExceptionFilter());
+  app.useGlobalFilters(
+    new InternalServerFilter(),
+    new HttpExceptionFilter(),
+    new ZodExceptionFilter(),
+  );
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.setGlobalPrefix('api');
 
   const adminConfig: ServiceAccount = {
     projectId: process.env.FIREBASE_PROJECT_ID,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    privateKey: process.env.FIREBASE_PRIVATE_KEY!.replace(/\\n/g, '\n'),
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
   };
   // Initialize the firebase admin app

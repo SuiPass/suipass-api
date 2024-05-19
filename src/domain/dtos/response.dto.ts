@@ -47,9 +47,13 @@ export class ErrorResponseDto extends ResponseDto {
   @ApiProperty()
   message: string;
 
-  constructor(message: string) {
+  @ApiProperty()
+  errors?: any;
+
+  constructor(message: string, errors?: any) {
     super(false);
     this.message = message;
+    this.errors = errors;
   }
 }
 

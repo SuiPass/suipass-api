@@ -3,7 +3,8 @@ import {
   ProviderController,
   RequestController,
   UserController,
-  EnterpriseController
+  EnterpriseController,
+  ScoreUseCaseController,
 } from './presentation';
 import {
   ListenerService,
@@ -11,9 +12,10 @@ import {
   RequestService,
   UserService,
   EnterpriseService,
+  ScoreUseCaseService,
 } from './app/services';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseClient, SuiClient } from './infra';
+import { DatabaseClient, ScoreUseCaseDao, SuiClient } from './infra';
 import {
   GithubProvider,
   GoogleProvider,
@@ -24,10 +26,19 @@ import {
 
 @Module({
   imports: [ConfigModule.forRoot({})],
-  controllers: [RequestController, ProviderController, UserController, EnterpriseController],
+  controllers: [
+    RequestController,
+    ProviderController,
+    UserController,
+    EnterpriseController,
+    ScoreUseCaseController,
+  ],
   providers: [
     DatabaseClient,
     SuiClient,
+
+    // daos
+    ScoreUseCaseDao,
 
     // providers
     GithubProvider,
@@ -41,7 +52,8 @@ import {
     RequestService,
     ProviderService,
     ListenerService,
-    EnterpriseService
+    EnterpriseService,
+    ScoreUseCaseService,
   ],
 })
-export class AppModule { }
+export class AppModule {}

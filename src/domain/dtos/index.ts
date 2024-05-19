@@ -25,9 +25,11 @@ export type UserApiKeyDto = {
   desc: string;
   providerIds: string[];
   apiKey: string; //TODO: Sui module key or whatever, i'm not sure
-}
+};
 export enum ProviderStatus {
   NOT_VERIFIED = 'not_verified',
   WAITING = 'waiting',
   VERIFIED = 'verified',
 }
+
+export * from './score-use-case.dto';
