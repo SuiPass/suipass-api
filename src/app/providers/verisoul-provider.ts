@@ -50,31 +50,32 @@ export class VerisoulProvider implements IProvider<VerisoulProviderProof> {
         success: false,
         message: 'Authentication with Verisoul failed!',
       };
-    if (verifyUniquenessData.matches?.length)
-      return {
-        success: false,
-        message: 'Identity has been belong with another user!',
-      };
 
-    // enroll
-    const enrollUrl = `${REQUEST_HOST}/liveness/enroll`;
-    const enrollRes = await axios.post(
-      enrollUrl,
-      {
-        session_id: sessionId,
-        account_id: walletAddress,
-      },
-      REQUEST_OPTIONS,
-    );
-    const { data: enrollData } = enrollRes;
-    if (!enrollData.success)
-      return {
-        success: false,
-        message: 'Authentication with Verisoul failed!',
-      };
+    // if (verifyUniquenessData.matches?.length)
+    //   return {
+    //     success: false,
+    //     message: 'Identity has been belong with another user!',
+    //   };
+    //
+    // // enroll
+    // const enrollUrl = `${REQUEST_HOST}/liveness/enroll`;
+    // const enrollRes = await axios.post(
+    //   enrollUrl,
+    //   {
+    //     session_id: sessionId,
+    //     account_id: walletAddress,
+    //   },
+    //   REQUEST_OPTIONS,
+    // );
+    // const { data: enrollData } = enrollRes;
+    // if (!enrollData.success)
+    //   return {
+    //     success: false,
+    //     message: 'Authentication with Verisoul failed!',
+    //   };
 
     const level = 3;
-    const evidence = JSON.stringify(enrollData);
+    const evidence = JSON.stringify(verifyUniquenessData);
 
     return {
       success: true,
