@@ -4,6 +4,7 @@ import { GithubProvider } from './github-provider';
 import { GoogleProvider } from './google-provider';
 import { TwitterProvider } from './twitter-provider';
 import { SuiProvider } from './sui-provider';
+import { VerisoulProvider } from './verisoul-provider';
 
 type GetProviderOutput<T> = T extends ProviderCodes.GITHUB
   ? GithubProvider
@@ -13,7 +14,9 @@ type GetProviderOutput<T> = T extends ProviderCodes.GITHUB
       ? TwitterProvider
       : T extends ProviderCodes.SUI
         ? SuiProvider
-        : IProvider<any>;
+        : T extends ProviderCodes.VERISOUL
+          ? VerisoulProvider
+          : IProvider<any>;
 
 @Injectable()
 export class ProviderFactory {
@@ -22,6 +25,7 @@ export class ProviderFactory {
     private readonly googleProvider: GoogleProvider,
     private readonly twitterProvider: TwitterProvider,
     private readonly suiProvider: SuiProvider,
+    private readonly verisoulProvider: VerisoulProvider,
   ) {}
 
   get<T extends ProviderCodes>(providerCode: T): GetProviderOutput<T> {
@@ -37,6 +41,12 @@ export class ProviderFactory {
 
       case ProviderCodes.SUI:
         return this.suiProvider as GetProviderOutput<T>;
+
+      case ProviderCodes.SUI:
+        return this.suiProvider as GetProviderOutput<T>;
+
+      case ProviderCodes.VERISOUL:
+        return this.verisoulProvider as GetProviderOutput<T>;
 
       default:
         throw new BadRequestException(`Provider don't support!`);

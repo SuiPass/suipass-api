@@ -13,13 +13,28 @@ export class ListenerService implements OnModuleInit {
   ) {}
 
   onModuleInit() {
-    this.sync().then(() => {
-      console.log('Data synced successfully');
-      // this.startListener();
-    });
+    this.sync()
+      .then(() => {
+        console.log('Data synced successfully');
+      })
+      .catch((err) => {
+        console.error('Data synchronization failed!', err);
+      });
+
+    // this.startListener()
+    //   .then(() => {
+    //     console.log(
+    //       `Listening to events from package ${SUI_CONFIG.PACKAGE_ADDR}`,
+    //     );
+    //   })
+    //   .catch((err) => {
+    //     console.error(
+    //       `An error occurred while listening to events from package ${SUI_CONFIG.PACKAGE_ADDR}!`,
+    //       err,
+    //     );
+    //   });
   }
 
-  // NOTE: Unused function
   private async startListener() {
     const client = new Client({
       transport: new SuiHTTPTransport({

@@ -3,6 +3,7 @@ export enum ProviderCodes {
   GOOGLE = 'GOOGLE',
   TWITTER = 'TWITTER',
   SUI = 'SUI',
+  VERISOUL = 'VERISOUL',
 }
 
 export function parseProviderCode(raw: string): ProviderCodes {

@@ -126,4 +126,9 @@ export class ProviderService {
 
     return Array.from(providersMap.values());
   }
+
+  async verisoulGetSession(): Promise<{ sessionId: string }> {
+    const provider = this.providerFactory.get(ProviderCodes.VERISOUL);
+    return provider.getSession();
+  }
 }

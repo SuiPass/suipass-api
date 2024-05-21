@@ -10,7 +10,7 @@ export class SuiProvider implements IProvider<SuiProviderProof> {
   constructor(private readonly suiclient: SuiClient) {}
 
   get cap() {
-    return SUI_PROVIDER_CONFIG.SUI_PROVIDER_CAP;
+    return SUI_PROVIDER_CONFIG.SUI_CAP;
   }
 
   parseProof(raw: any): SuiProviderProof {
