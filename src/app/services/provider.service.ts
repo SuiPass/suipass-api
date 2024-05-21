@@ -12,6 +12,7 @@ import {
   ProviderFactory,
   TwitterProviderProof,
   SuiProviderProof,
+  VerisoulProviderProof,
 } from '../providers';
 import { DatabaseClient } from 'src/infra';
 import { UserService } from './user.service';
@@ -28,30 +29,41 @@ export class ProviderService {
   async verify({
     providerCode,
     proof,
+    walletAddress,
   }:
     | {
         providerCode: ProviderCodes;
         proof: never;
+        walletAddress: string;
       }
     | {
         providerCode: ProviderCodes.GITHUB;
         proof: GithubProviderProof;
+        walletAddress: string;
       }
     | {
         providerCode: ProviderCodes.GOOGLE;
         proof: GoogleProviderProof;
+        walletAddress: string;
       }
     | {
         providerCode: ProviderCodes.TWITTER;
         proof: TwitterProviderProof;
+        walletAddress: string;
       }
     | {
         providerCode: ProviderCodes.SUI;
         proof: SuiProviderProof;
+        walletAddress: string;
+      }
+    | {
+        providerCode: ProviderCodes.VERISOUL;
+        proof: VerisoulProviderProof;
+        walletAddress: string;
       }) {
     const provider = this.providerFactory.get(providerCode);
 
-    const res = await provider.verify({ proof: proof as any }); // HACK: Should remove `as any`
+    const res = await provider.verify({ proof: proof as any, walletAddress }); // HACK: Should remove `as any`
 
     return res;
   }

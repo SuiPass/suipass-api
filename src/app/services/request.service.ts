@@ -67,7 +67,10 @@ export class RequestService {
 
     const parsedProof = provider.parseProof(proof);
 
-    const result = await provider.verify({ proof: parsedProof as any }); // HACK: Should remove `as any`
+    const result = await provider.verify({
+      proof: parsedProof as any,
+      walletAddress,
+    }); // HACK: Should remove `as any`
 
     if (result.success === true) {
       await this.suiclient.approveRequest(
