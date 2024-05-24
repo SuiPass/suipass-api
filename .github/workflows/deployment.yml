@@ -62,4 +62,4 @@ jobs:
             cd ~/deploy
             docker image prune -af
             docker pull tinguyen11702/suipass:$TAG
-            docker-compose up --build --detach
+            docker compose up --build --detach
