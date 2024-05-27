@@ -13,6 +13,7 @@ export type UserDetailDto = {
   address: string;
   approvals: ApprovalDto[];
   totalScore: number;
+  isValid: boolean;
 };
 export type EnterpriseDto = {
   name: string;

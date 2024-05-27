@@ -52,6 +52,7 @@ export class UserService {
     const ref = await this.db.client.collection('providers').get();
     const currentApprovals: ApprovalDto[] = [];
     let totalScore = 0;
+    let isValid = false;
     const ent =
       enterpriseAddress !== null
         ? await this.entSvc.getById(enterpriseAddress)
@@ -74,12 +75,6 @@ export class UserService {
 
       if (approvalsOfProvider.length) {
         const currentApproval = approvalsOfProvider[0];
-        console.log(
-          202125117,
-          currentApproval.level,
-          provider.maxLevel,
-          provider.maxScore,
-        );
         const score =
           (currentApproval.level / provider.maxLevel) * provider.maxScore;
 
@@ -91,10 +86,18 @@ export class UserService {
         });
       }
     });
+
+    if (ent !== null) {
+      isValid = totalScore >= ent.threshold;
+    } else {
+      isValid = totalScore >= 400;
+    }
+
     return {
       address: walletAddress,
       approvals: currentApprovals,
       totalScore,
+      isValid,
     };
   }
 }
