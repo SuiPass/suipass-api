@@ -72,7 +72,7 @@ export class ProviderService {
     const [providerRef, approvals, requests] = await Promise.all([
       this.db.client
         .collection('providers')
-        .where('disabled', '!=', true)
+        // .where('disabled', '!=', true)
         .get(),
       walletAddress ? this.userSvc.getApprovals(walletAddress) : undefined,
       walletAddress

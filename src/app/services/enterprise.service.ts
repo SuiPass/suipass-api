@@ -13,17 +13,17 @@ import {
   TwitterProviderProof,
   SuiProviderProof,
 } from '../providers';
-import { DatabaseClient } from 'src/infra';
+import { DatabaseClient, SuiClient } from 'src/infra';
 import { UserService } from './user.service';
 import { request } from 'http';
+import {
+  EnterpriseContractDto,
+  ProviderConfigContractDto,
+} from 'src/domain/contract/enterprise';
 
 @Injectable()
 export class EnterpriseService {
-  constructor(
-    private readonly db: DatabaseClient,
-    private readonly providerFactory: ProviderFactory,
-    private readonly userSvc: UserService,
-  ) {}
+  constructor(private readonly sui: SuiClient) {}
 
   // async verify({
   //   providerCode,
@@ -124,4 +124,43 @@ export class EnterpriseService {
     });
     return data;
   }
+
+  async getById(id: string): Promise<EnterpriseContractDto> {
+    const res = await this.sui.client.getObject({
+      id,
+      options: { showContent: true, showOwner: true },
+    });
+    return mapToEnterpriseContractDto(res);
+  }
+}
+
+function mapToEnterpriseContractDto(raw: any): EnterpriseContractDto {
+  const content = raw.data.content;
+  if (content.dataType === 'package') throw 'Invalid enterprise address';
+  const {
+    id: { id },
+    name,
+    metadata,
+    providers,
+    threshold,
+  } = content.fields;
+  const providersConfig = new Map<string, ProviderConfigContractDto>();
+  providers.fields.contents.forEach((v) => {
+    const {
+      key,
+      value: {
+        fields: { dummy_field },
+      },
+    } = v.fields;
+    console.log(key, dummy_field);
+    providersConfig.set(key, { dummyField: dummy_field });
+  });
+
+  return {
+    id,
+    name,
+    metadata,
+    providers: providersConfig,
+    threshold,
+  };
 }

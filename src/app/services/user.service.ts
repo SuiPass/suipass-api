@@ -7,12 +7,14 @@ import {
   mapToApproval,
 } from 'src/domain';
 import { DatabaseClient, SuiClient } from 'src/infra';
+import { EnterpriseService } from './enterprise.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly db: DatabaseClient,
     private readonly sui: SuiClient,
+    private readonly entSvc: EnterpriseService,
   ) {}
 
   async getApprovals(walletAddress: string): Promise<Approval[]> {
@@ -42,17 +44,22 @@ export class UserService {
     return userObjects.data.map(mapToApproval);
   }
 
-  async getUserDetails(walletAddress: string): Promise<UserDetailDto> {
+  async getUserDetails(
+    walletAddress: string,
+    enterpriseAddress: string = null,
+  ): Promise<UserDetailDto> {
     const approvals = await this.getApprovals(walletAddress);
-
     const ref = await this.db.client.collection('providers').get();
-
     const currentApprovals: ApprovalDto[] = [];
     let totalScore = 0;
+    const ent =
+      enterpriseAddress !== null
+        ? await this.entSvc.getById(enterpriseAddress)
+        : null;
 
     ref.docs.forEach((doc) => {
       const provider = doc.data();
-
+      if (ent !== null && !ent.providers.has(provider.id)) return;
       // sort approvals by level desc, issuedDate desc
       const approvalsOfProvider = approvals
         .filter((approval) => approval.provider === provider.id)
@@ -67,6 +74,12 @@ export class UserService {
 
       if (approvalsOfProvider.length) {
         const currentApproval = approvalsOfProvider[0];
+        console.log(
+          202125117,
+          currentApproval.level,
+          provider.maxLevel,
+          provider.maxScore,
+        );
         const score =
           (currentApproval.level / provider.maxLevel) * provider.maxScore;
 
@@ -78,7 +91,6 @@ export class UserService {
         });
       }
     });
-
     return {
       address: walletAddress,
       approvals: currentApprovals,
