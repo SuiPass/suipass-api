@@ -2,6 +2,7 @@ import { Approval } from '../contract';
 import { ProviderEntity } from '../entity';
 
 export * from './response.dto';
+export * from './enterprise.dto';
 
 export type ApprovalDto = { score: number } & Approval;
 export type ProviderDto = {

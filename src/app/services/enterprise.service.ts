@@ -1,29 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import {
+  EnterpriseDetailDto,
   EnterpriseDto,
-  ProviderCodes,
   UserApiKeyDto,
   mapRawToEnterpriseEntity,
   mapRawToUserApiKeyEntity,
 } from 'src/domain';
-import {
-  GithubProviderProof,
-  GoogleProviderProof,
-  ProviderFactory,
-  TwitterProviderProof,
-  SuiProviderProof,
-} from '../providers';
-import { DatabaseClient, SuiClient } from 'src/infra';
-import { UserService } from './user.service';
-import { request } from 'http';
+import { SuiClient } from 'src/infra';
 import {
   EnterpriseContractDto,
   ProviderConfigContractDto,
 } from 'src/domain/contract/enterprise';
+import { ProviderService } from './provider.service';
 
 @Injectable()
 export class EnterpriseService {
-  constructor(private readonly sui: SuiClient) {}
+  constructor(
+    private readonly sui: SuiClient,
+    private readonly providerSvc: ProviderService,
+  ) {}
 
   // async verify({
   //   providerCode,
@@ -130,7 +125,22 @@ export class EnterpriseService {
       id,
       options: { showContent: true, showOwner: true },
     });
-    return mapToEnterpriseContractDto(res);
+    const ent = mapToEnterpriseContractDto(res);
+    return ent;
+  }
+
+  async getDetailById(id: string): Promise<EnterpriseDetailDto> {
+    const res = await this.sui.client.getObject({
+      id,
+      options: { showContent: true, showOwner: true },
+    });
+    const ent = mapToEnterpriseContractDto(res) as any;
+    for (const key in ent.providers) {
+      if (ent.providers.hasOwnProperty(key)) {
+        ent.providers.key = this.providerSvc.getById(key);
+      }
+    }
+    return ent;
   }
 }
 
@@ -144,7 +154,7 @@ function mapToEnterpriseContractDto(raw: any): EnterpriseContractDto {
     providers,
     threshold,
   } = content.fields;
-  const providersConfig = new Map<string, ProviderConfigContractDto>();
+  const providersConfig: { [key: string]: ProviderConfigContractDto } = {};
   providers.fields.contents.forEach((v) => {
     const {
       key,
@@ -153,7 +163,7 @@ function mapToEnterpriseContractDto(raw: any): EnterpriseContractDto {
       },
     } = v.fields;
     console.log(key, dummy_field);
-    providersConfig.set(key, { dummyField: dummy_field });
+    providersConfig[key] = { dummyField: dummy_field };
   });
 
   return {

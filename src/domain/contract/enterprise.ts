@@ -3,6 +3,6 @@ export type EnterpriseContractDto = {
   id: string;
   name: string;
   metadata: string;
-  providers: Map<string, ProviderConfigContractDto>; // Any
+  providers: { [key: string]: ProviderConfigContractDto }; // Any
   threshold: number;
 };

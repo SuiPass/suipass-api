@@ -1,3 +1,5 @@
+export * from './enterprise';
+
 export type Suipass = {
   id: string;
   providers: Provider[];

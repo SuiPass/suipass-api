@@ -49,7 +49,7 @@ export function mapRawToEnterpriseEntity(raw: any): EnterpriseEntity {
   return {
     name: raw.name,
     desc: raw.desc,
-    providerIds: raw.providerIds
+    providerIds: raw.providerIds,
   };
 }
 

@@ -60,7 +60,7 @@ export class UserService {
 
     ref.docs.forEach((doc) => {
       const provider = doc.data();
-      if (ent !== null && !ent.providers.has(provider.id)) return;
+      if (ent !== null && !ent.providers[provider.id]) return;
       // sort approvals by level desc, issuedDate desc
       const approvalsOfProvider = approvals
         .filter((approval) => approval.provider === provider.id)

@@ -3,6 +3,7 @@ import {
   ApprovalDto,
   ProviderCodes,
   ProviderDto,
+  ProviderEntity,
   ProviderStatus,
   mapRawToProviderEntity,
 } from 'src/domain';
@@ -16,7 +17,6 @@ import {
 } from '../providers';
 import { DatabaseClient } from 'src/infra';
 import { UserService } from './user.service';
-import { request } from 'http';
 
 @Injectable()
 export class ProviderService {
@@ -142,5 +142,10 @@ export class ProviderService {
   async verisoulGetSession(): Promise<{ sessionId: string }> {
     const provider = this.providerFactory.get(ProviderCodes.VERISOUL);
     return provider.getSession();
+  }
+
+  async getById(id: string): Promise<ProviderEntity> {
+    const provider = this.db.client.collection('providers').doc(id);
+    return mapRawToProviderEntity(provider);
   }
 }
