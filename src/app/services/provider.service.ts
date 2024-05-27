@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import {
   ApprovalDto,
   ProviderCodes,
@@ -23,6 +23,7 @@ export class ProviderService {
   constructor(
     private readonly db: DatabaseClient,
     private readonly providerFactory: ProviderFactory,
+    @Inject(forwardRef(() => UserService))
     private readonly userSvc: UserService,
   ) {}
 

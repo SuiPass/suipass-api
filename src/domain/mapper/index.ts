@@ -64,7 +64,7 @@ export function mapRawToUserApiKeyEntity(raw: any): UserApiKeyEntity {
 
 export function mapToApproval(raw: any): Approval {
   const {
-    id,
+    id: { id },
     provider,
     level,
     evidence,

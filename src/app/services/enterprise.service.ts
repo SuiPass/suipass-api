@@ -155,7 +155,7 @@ function mapToEnterpriseContractDto(raw: any): EnterpriseContractDto {
     threshold,
   } = content.fields;
   const providersConfig: { [key: string]: ProviderConfigContractDto } = {};
-  providers.fields.contents.forEach((v) => {
+  providers.fields.contents.forEach((v: any) => {
     const {
       key,
       value: {
