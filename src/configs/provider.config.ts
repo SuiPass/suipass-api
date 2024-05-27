@@ -11,7 +11,7 @@ export const GOOGLE_CONFIG = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   GOOGLE_REDIRECT_URI:
     process.env.GOOGLE_REDIRECT_URI ??
-    'https://suippass.xyz/dashboard?suipassProvider=google',
+    'https://suipass.xyz?suipassProvider=google',
   GOOGLE_OWNER: process.env.GOOGLE_OWNER,
   GOOGLE_CAP: process.env.GOOGLE_CAP,
   GOOGLE_PROVIDER_ID: process.env.GOOGLE_PROVIDER_ID,
@@ -22,7 +22,7 @@ export const TWITTER_CONFIG = {
   TWITTER_CLIENT_SECRET: process.env.TWITTER_CLIENT_SECRET,
   TWITTER_REDIRECT_URI:
     process.env.TWITTER_REDIRECT_URI ??
-    'https://suippass.xyz/dashboard?suipassProvider=twitter',
+    'https://suipass.xyz?suipassProvider=twitter',
   TWITTER_OWNER: process.env.TWITTER_OWNER,
   TWITTER_CAP: process.env.TWITTER_CAP,
   TWITTER_PROVIDER_ID: process.env.TWITTER_PROVIDER_ID,
