@@ -4,4 +4,5 @@ export type ScoreUseCaseDto = {
   description: string;
   providerIds: string[];
   order: number;
+  thumbnailUrl?: string;
 };

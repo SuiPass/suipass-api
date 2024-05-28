@@ -7,6 +7,7 @@ export type ScoreUseCaseCreateInput = {
   description: string;
   providerIds: string[];
   order: number;
+  thumbnailUrl?: string;
 };
 export type ScoreUseCaseCreateOutput = void;
 export const ScoreUseCaseCreateInputSchema = z.object({
@@ -14,6 +15,7 @@ export const ScoreUseCaseCreateInputSchema = z.object({
   description: z.string(),
   providerIds: z.string().array(),
   order: z.number(),
+  thumbnailUrl: z.string().url().optional(),
 });
 
 // Update
@@ -23,6 +25,7 @@ export type ScoreUseCaseUpdateInput = {
   description?: string;
   providerIds?: string[];
   order?: number;
+  thumbnailUrl?: string;
 };
 export type ScoreUseCaseUpdateOutput = void;
 export const ScoreUseCaseUpdateInputSchema = z.object({
@@ -31,6 +34,7 @@ export const ScoreUseCaseUpdateInputSchema = z.object({
   description: z.string().optional(),
   providerIds: z.string().array().optional(),
   order: z.number().optional(),
+  thumbnailUrl: z.string().url().optional(),
 });
 
 // Delete
