@@ -74,7 +74,7 @@ export class VerisoulProvider implements IProvider<VerisoulProviderProof> {
     //     message: 'Authentication with Verisoul failed!',
     //   };
 
-    const level = 3;
+    const level = 1;
     const evidence = JSON.stringify(verifyUniquenessData);
 
     return {
