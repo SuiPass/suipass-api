@@ -73,8 +73,8 @@ export class EnterpriseService {
         name: 'Bot prevention',
         desc: 'I want my community or app to be safe from bots',
         providerIds: [
-          '0xe9f29c68c836590e76b8219ef1d1722b806f1c5beeb25954c8053ab1e6974a6a',
-          '0x50581dae10313e3460821fe0d9f4a3929c25a82a88974e6ec28af8b901683b3a',
+          '0xfb72d6b3d78fa27bf4c05aac3314d8e9fd5ec5f798a982169c6c4533572db1b1',
+          '0x24bee1879eff747dd1f27d548ef51d95c869c5467997e8b3f0877ed29cd99f5c',
         ],
       },
       {
