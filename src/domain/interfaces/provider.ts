@@ -6,10 +6,10 @@ export interface IProvider<T> {
 
 export type VerificationResult =
   | {
-    success: true;
-    data: { evidence: string; level: number };
-  }
+      success: true;
+      data: { evidence: string; level: number };
+    }
   | {
-    success: false;
-    message: string;
-  };
+      success: false;
+      message: string;
+    };
