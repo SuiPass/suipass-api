@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { OAuth2Client } from 'google-auth-library';
-import { GOOGLE_CONFIG } from 'src/configs/provider.config';
+
+import { GOOGLE_CONFIG } from 'src/configs';
 import { IProvider, VerificationResult } from 'src/domain';
 
 export type GoogleProviderProof = { authorizationCode: string };

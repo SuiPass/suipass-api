@@ -1,7 +1,7 @@
 name: Deploy
 on:
   push:
-    branches: [main]
+    branches: [dev, cicd/*]
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -51,15 +51,15 @@ jobs:
       - name: Deploy on VPS
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_PROD_HOSTNAME }}
-          username: ${{ secrets.EC2_PROD_USER }}
-          key: ${{ secrets.EC2_PROD_PRIVATE_KEY }}
+          host: ${{ secrets.EC2_DEV_HOSTNAME }}
+          username: ${{ secrets.EC2_DEV_USER }}
+          key: ${{ secrets.EC2_DEV_PRIVATE_KEY }}
           envs: TAG
           port: 22
           script: |-
             cd ~/deploy
             docker image prune -af
             docker pull tinguyen11702/suipass:$TAG
-            export STAG_TAG=$TAG
-            export DEV_TAG=export STAG_TAG=$(docker inspect suipass-dev --format='{{.Config.Image}}' | awk -F':' '{print $2}')
+            export DEV_TAG=$TAG
+            export STAG_TAG=export STAG_TAG=$(docker inspect suipass-stag --format='{{.Config.Image}}' | awk -F':' '{print $2}')
             docker compose up --build --detach

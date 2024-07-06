@@ -13,18 +13,48 @@ export class TwitterProvider implements IProvider<TwitterProviderProof> {
     return TWITTER_CONFIG.TWITTER_CAP;
   }
 
+  private get basicAuth() {
+    const basicAuthToken = Buffer.from(
+      `${TWITTER_CONFIG.TWITTER_CLIENT_ID}:${TWITTER_CONFIG.TWITTER_CLIENT_SECRET}`,
+      'utf8',
+    ).toString('base64');
+    return `Basic ${basicAuthToken}`;
+  }
+
+  parseProof(raw: string): TwitterProviderProof {
+    return { authorizationCode: raw };
+  }
+
   async verify({
     proof,
   }: {
     proof: TwitterProviderProof;
   }): Promise<VerificationResult> {
     const { authorizationCode } = proof;
+    try {
+      await this.getAccessToken(authorizationCode);
 
-    const basicAuthToken = Buffer.from(
-      `${TWITTER_CONFIG.TWITTER_CLIENT_ID}:${TWITTER_CONFIG.TWITTER_CLIENT_SECRET}`,
-      'utf8',
-    ).toString('base64');
+      // TODO: analyze user data and return the evident and level for that user
+      const evidence =
+        'using some protocol to generate the evident of user from their data with out revealing their data';
+      const level = 1;
 
+      return {
+        success: true,
+        data: {
+          evidence,
+          level,
+        },
+      };
+    } catch (err) {
+      return {
+        success: false,
+        message: `Error: ${err}`,
+      };
+    }
+  }
+
+  private async getAccessToken(authorizationCode: string) {
     const twitterOauthTokenParams = {
       client_id: TWITTER_CONFIG.TWITTER_CLIENT_ID,
       code_verifier: '8KxxO-RPl0bLSxX5AWwgdiFbMnry_VOKzFeIlVA7NoA',
@@ -41,36 +71,15 @@ export class TwitterProvider implements IProvider<TwitterProviderProof> {
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: `Basic ${basicAuthToken}`,
+          Authorization: this.basicAuth,
         },
       },
     );
 
     const accessToken = res.data.access_token;
-    console.log('Twitter access token:', accessToken);
-
-    // TODO: analyze user data and return the evident and level for that user
-    const evidence =
-      'using some protocol to generate the evident of user from their data with out revealing their data';
-    const level = 1;
-
-    if (accessToken) {
-      return {
-        success: true,
-        data: {
-          evidence,
-          level,
-        },
-      };
-    } else {
-      return {
-        success: false,
-        message: "Cannot get user's access_token",
-      };
+    if (!accessToken) {
+      throw "Cannot get user's access_token";
     }
-  }
-
-  parseProof(raw: string): TwitterProviderProof {
-    return { authorizationCode: raw };
+    return accessToken;
   }
 }
