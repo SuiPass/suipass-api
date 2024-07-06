@@ -61,5 +61,5 @@ jobs:
             docker image prune -af
             docker pull tinguyen11702/suipass:$TAG
             export STAG_TAG=$TAG
-            export DEV_TAG=export STAG_TAG=$(docker inspect suipass-stag --format='{{.Config.Image}}' | awk -F':' '{print $2}')
+            export DEV_TAG=export STAG_TAG=$(docker inspect suipass-dev --format='{{.Config.Image}}' | awk -F':' '{print $2}')
             docker compose up --build --detach
