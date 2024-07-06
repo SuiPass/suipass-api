@@ -43,3 +43,14 @@ export const VERISOUL_CONFIG = {
   VERISOUL_API_KEY:
     process.env.VERISOUL_API_KEY || 'kNIEf4Sj9odUo1LARYWFdPaHS8ScZnVtswd3xFbI',
 };
+
+export const DISCORD_CONFIG = {
+  DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
+  DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
+  DISCORD_REDIRECT_URI:
+    process.env.DISCORD_REDIRECT_URI ??
+    'https://suipass.xyz?suipassProvider=discord',
+  DISCORD_OWNER: process.env.DISCORD_OWNER,
+  DISCORD_CAP: process.env.DISCORD_CAP,
+  DISCORD_PROVIDER_ID: process.env.DISCORD_PROVIDER_ID,
+} as const;

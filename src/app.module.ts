@@ -23,6 +23,7 @@ import {
   TwitterProvider,
   SuiProvider,
   VerisoulProvider,
+  DiscordProvider,
 } from './app';
 
 @Module({
@@ -48,6 +49,7 @@ import {
     ProviderFactory,
     SuiProvider,
     VerisoulProvider,
+    DiscordProvider,
 
     // services
     UserService,
