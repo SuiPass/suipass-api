@@ -24,6 +24,7 @@ import {
   SuiProvider,
   VerisoulProvider,
   DiscordProvider,
+  FacebookProvider,
 } from './app';
 
 @Module({
@@ -50,6 +51,7 @@ import {
     SuiProvider,
     VerisoulProvider,
     DiscordProvider,
+    FacebookProvider,
 
     // services
     UserService,

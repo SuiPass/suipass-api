@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { DISCORD_CONFIG, GITHUB_CONFIG } from 'src/configs';
+import { DISCORD_CONFIG } from 'src/configs';
 import { IProvider, VerificationResult } from 'src/domain';
 
 export type DiscordProviderProof = { authorizationCode: string };
@@ -25,7 +25,7 @@ export class DiscordProvider implements IProvider<DiscordProviderProof> {
   constructor() {}
 
   get cap() {
-    return GITHUB_CONFIG.GITHUB_CAP;
+    return DISCORD_CONFIG.DISCORD_CAP;
   }
 
   parseProof(raw: string): DiscordProviderProof {
