@@ -5,6 +5,7 @@ export enum ProviderCodes {
   SUI = 'SUI',
   VERISOUL = 'VERISOUL',
   DISCORD = 'DISCORD',
+  TEN = 'TEN',
 }
 
 export function parseProviderCode(raw: string): ProviderCodes {

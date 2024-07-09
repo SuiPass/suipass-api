@@ -35,6 +35,15 @@ export async function test(app: INestApplication) {
     .then((res) => console.info('sui verify passed', res))
     .catch((err) => console.error('sui verify failed', err));
 
+  await providerService
+    .verify({
+      providerCode: ProviderCodes.TEN,
+      proof: {},
+      walletAddress: '',
+    })
+    .then((res) => console.info('ten verify passed', res))
+    .catch((err) => console.error('ten verify failed', err));
+
   // await providerService
   //   .verify({
   //     providerCode: ProviderCodes.TWITTER,
