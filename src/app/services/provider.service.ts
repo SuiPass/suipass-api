@@ -17,6 +17,7 @@ import {
 } from '../providers';
 import { DatabaseClient } from 'src/infra';
 import { UserService } from './user.service';
+import { TenProviderProof } from '../providers/ten-provider';
 
 @Injectable()
 export class ProviderService {
@@ -60,6 +61,11 @@ export class ProviderService {
     | {
         providerCode: ProviderCodes.VERISOUL;
         proof: VerisoulProviderProof;
+        walletAddress: string;
+      }
+    | {
+        providerCode: ProviderCodes.TEN;
+        proof: TenProviderProof;
         walletAddress: string;
       }) {
     const provider = this.providerFactory.get(providerCode);

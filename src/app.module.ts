@@ -25,6 +25,7 @@ import {
   VerisoulProvider,
   DiscordProvider,
 } from './app';
+import { TenProvider } from './app/providers/ten-provider';
 
 @Module({
   imports: [ConfigModule.forRoot({})],
@@ -50,6 +51,7 @@ import {
     SuiProvider,
     VerisoulProvider,
     DiscordProvider,
+    TenProvider,
 
     // services
     UserService,
