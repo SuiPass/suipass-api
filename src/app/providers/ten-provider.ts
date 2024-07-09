@@ -16,7 +16,7 @@ export class TenProvider implements IProvider<TenProviderProof> {
     return (async () => {
       return {
         success: true,
-        data: { evidence: 'random', level: 1 },
+        data: { evidence: 'random', level: 3 },
       };
     })();
   }
