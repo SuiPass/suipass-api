@@ -7,6 +7,7 @@ import { SuiProvider } from './sui-provider';
 import { VerisoulProvider } from './verisoul-provider';
 import { DiscordProvider } from './discord-provider';
 import { FacebookProvider } from './facebook-provider';
+import { TenProvider } from './ten-provider';
 
 type GetProviderOutput<T> = T extends ProviderCodes.GITHUB
   ? GithubProvider
@@ -22,6 +23,8 @@ type GetProviderOutput<T> = T extends ProviderCodes.GITHUB
             ? DiscordProvider
             : T extends ProviderCodes.FACEBOOK
               ? FacebookProvider
+            : T extends ProviderCodes.TEN
+              ? TenProvider
               : IProvider<any>;
 
 @Injectable()
@@ -34,6 +37,7 @@ export class ProviderFactory {
     private readonly verisoulProvider: VerisoulProvider,
     private readonly discordProvider: DiscordProvider,
     private readonly facebookProvider: FacebookProvider,
+    private readonly tenProvider: TenProvider,
   ) {}
 
   get<T extends ProviderCodes>(providerCode: T): GetProviderOutput<T> {
@@ -61,6 +65,9 @@ export class ProviderFactory {
 
       case ProviderCodes.FACEBOOK:
         return this.facebookProvider as GetProviderOutput<T>;
+
+      case ProviderCodes.TEN:
+        return this.tenProvider as GetProviderOutput<T>;
 
       default:
         throw new BadRequestException(`Provider don't support!`);

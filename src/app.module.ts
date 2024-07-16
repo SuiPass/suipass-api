@@ -26,6 +26,7 @@ import {
   DiscordProvider,
   FacebookProvider,
 } from './app';
+import { TenProvider } from './app/providers/ten-provider';
 
 @Module({
   imports: [ConfigModule.forRoot({})],
@@ -52,6 +53,7 @@ import {
     VerisoulProvider,
     DiscordProvider,
     FacebookProvider,
+    TenProvider,
 
     // services
     UserService,

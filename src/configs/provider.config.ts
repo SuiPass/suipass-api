@@ -65,3 +65,9 @@ export const FACEBOOK_CONFIG = {
   FACEBOOK_CAP: process.env.FACEBOOK_CAP,
   FACEBOOK_PROVIDER_ID: process.env.FACEBOOK_PROVIDER_ID,
 } as const;
+
+export const TEN_CONFIG = {
+  TEN_OWNER: process.env.TEN_OWNER,
+  TEN_CAP: process.env.TEN_CAP,
+  TEN_PROVIDER_ID: process.env.TEN_PROVIDER_ID,
+};
