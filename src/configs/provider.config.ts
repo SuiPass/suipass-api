@@ -55,6 +55,17 @@ export const DISCORD_CONFIG = {
   DISCORD_PROVIDER_ID: process.env.DISCORD_PROVIDER_ID,
 } as const;
 
+export const FACEBOOK_CONFIG = {
+  FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
+  FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
+  FACEBOOK_REDIRECT_URI:
+    process.env.FACEBOOK_REDIRECT_URI ??
+    'https://suipass.xyz?suipassProvider=facebook',
+  FACEBOOK_OWNER: process.env.FACEBOOK_OWNER,
+  FACEBOOK_CAP: process.env.FACEBOOK_CAP,
+  FACEBOOK_PROVIDER_ID: process.env.FACEBOOK_PROVIDER_ID,
+} as const;
+
 export const TEN_CONFIG = {
   TEN_OWNER: process.env.TEN_OWNER,
   TEN_CAP: process.env.TEN_CAP,

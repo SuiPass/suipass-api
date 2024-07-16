@@ -5,6 +5,7 @@ export enum ProviderCodes {
   SUI = 'SUI',
   VERISOUL = 'VERISOUL',
   DISCORD = 'DISCORD',
+  FACEBOOK = 'FACEBOOK',
   TEN = 'TEN',
 }
 

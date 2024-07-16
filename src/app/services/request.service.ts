@@ -35,6 +35,8 @@ export class RequestService {
     if (currentDoc.docs.length)
       throw new BadRequestException('Request is exists!');
 
+    const provider = this.providerFactory.get(parseProviderCode(providerCode));
+
     console.log(
       'Create a request',
       JSON.stringify(
@@ -63,8 +65,6 @@ export class RequestService {
     await newDoc.set(record);
 
     // Resolve request
-    const provider = this.providerFactory.get(parseProviderCode(providerCode));
-
     const parsedProof = provider.parseProof(proof);
 
     const result = await provider.verify({

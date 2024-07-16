@@ -24,6 +24,7 @@ import {
   SuiProvider,
   VerisoulProvider,
   DiscordProvider,
+  FacebookProvider,
 } from './app';
 import { TenProvider } from './app/providers/ten-provider';
 
@@ -51,6 +52,7 @@ import { TenProvider } from './app/providers/ten-provider';
     SuiProvider,
     VerisoulProvider,
     DiscordProvider,
+    FacebookProvider,
     TenProvider,
 
     // services

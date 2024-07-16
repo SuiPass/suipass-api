@@ -6,6 +6,7 @@ import { TwitterProvider } from './twitter-provider';
 import { SuiProvider } from './sui-provider';
 import { VerisoulProvider } from './verisoul-provider';
 import { DiscordProvider } from './discord-provider';
+import { FacebookProvider } from './facebook-provider';
 import { TenProvider } from './ten-provider';
 
 type GetProviderOutput<T> = T extends ProviderCodes.GITHUB
@@ -20,6 +21,8 @@ type GetProviderOutput<T> = T extends ProviderCodes.GITHUB
           ? VerisoulProvider
           : T extends ProviderCodes.DISCORD
             ? DiscordProvider
+            : T extends ProviderCodes.FACEBOOK
+              ? FacebookProvider
             : T extends ProviderCodes.TEN
               ? TenProvider
               : IProvider<any>;
@@ -33,6 +36,7 @@ export class ProviderFactory {
     private readonly suiProvider: SuiProvider,
     private readonly verisoulProvider: VerisoulProvider,
     private readonly discordProvider: DiscordProvider,
+    private readonly facebookProvider: FacebookProvider,
     private readonly tenProvider: TenProvider,
   ) {}
 
@@ -58,6 +62,9 @@ export class ProviderFactory {
 
       case ProviderCodes.DISCORD:
         return this.discordProvider as GetProviderOutput<T>;
+
+      case ProviderCodes.FACEBOOK:
+        return this.facebookProvider as GetProviderOutput<T>;
 
       case ProviderCodes.TEN:
         return this.tenProvider as GetProviderOutput<T>;

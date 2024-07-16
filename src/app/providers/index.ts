@@ -5,3 +5,4 @@ export * from './twitter-provider';
 export * from './sui-provider';
 export * from './verisoul-provider';
 export * from './discord-provider';
+export * from './facebook-provider';
